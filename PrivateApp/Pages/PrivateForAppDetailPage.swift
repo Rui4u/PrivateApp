@@ -10,34 +10,44 @@ import SwiftUI
 struct PrivateForAppDetailPage: View {
     let detailData: PrivateDataForAppModel
     var body: some View {
-            List{
-                Section(header: Text("记录")) {
-                    NavigationLink(destination: PrivateLocationDetailListPage(dataSource: detailData.accessors)){
-                        HStack{
-                            Image(systemName: "hand.raised.slash").foregroundColor(.red)
-                            Text("访问记录")
-                        }
-                    }
-            
-                    NavigationLink(destination: Text("没写呢")) {
-                        HStack {
-                            Image(systemName: "network").foregroundColor(.blue)
-                            Text("网络活动")
-                        }
+        List{
+            Section(header: Text("记录")) {
+                NavigationLink(destination: PrivateLocationDetailListPage(dataSource: detailData.accessors)){
+                    HStack{
+                        Image(systemName: "hand.raised.slash")
+                            .foregroundColor(.red)
+                        Text("访问记录")
                     }
                 }
                 
-                let result = UserDataSourceManager.findCharsData(interval: 60, type: "location", dataSource: detailData.accessors)
-                ZStack {
-                    GeometryReader { reader in
-                        CharsView(dataSource: result)
-                            .frame(width: reader.size.width, height: reader.size.height)
+                NavigationLink(destination: Text("没写呢")) {
+                    HStack {
+                        Image(systemName: "network")
+                            .foregroundColor(.blue)
+                        Text("网络活动")
                     }
-                }.frame(height: 300)
-                
-            }.navigationTitle(detailData.boundID)
-            .listStyle(GroupedListStyle())
+                }
+            }
+            
+            let result = UserDataSourceManager.findCharsData(dataSource: detailData.accessors, onlyLastDay: true)
+            ZStack {
+                GeometryReader { reader in
+                    CharsView(dataSource: result,
+                              waringTimes: UserPreferencesManager.shared.warringTimes)
+                        .frame(width: reader.size.width, height: reader.size.height)
+                }
+            }
+            .frame(height: 300)
+            
+        }
+        .navigationTitle(UserDataSourceManager.appName(boundId: detailData.boundID))
+        .listStyle(GroupedListStyle())
+        .onAppear {
+            Request().loadData(boundId: detailData.boundID)
+        }
     }
+    
+    
 }
 
 struct PrivateForAppDetailPage_Previews: PreviewProvider {

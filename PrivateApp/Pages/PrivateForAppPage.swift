@@ -37,11 +37,7 @@ struct PrivateForAppPage: View {
                     }
                 }
             }
-            Text("Select an item")
         }
-    }
-    func addItem() {
-        
     }
 }
 
@@ -50,12 +46,15 @@ struct PrivateForAppPage: View {
 
 struct PrivateForAppPageListItem: View {
     let item: PrivateDataForAppModel
+    @State var image : UIImage = UIImage()
     var body: some View {
         HStack {
             HStack {
-                Image(systemName: "circle.grid.cross")
+                let url = UserDataSourceManager.appIconUrl(boundId: item.boundID)
+                IconImage(imageUrl: url)
                 VStack {
-                    Text(item.boundID).lineLimit(1)
+                    Text(UserDataSourceManager.appInfo(boundId: item.boundID)?.name ?? item.boundID)
+                        .lineLimit(1)
                 }
             }
             Spacer()

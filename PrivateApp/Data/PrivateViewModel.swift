@@ -44,51 +44,5 @@ struct PrivateViewModel {
    
 }
 
-struct AppInfo {
-    var name: String;
-    var locationIconString: String;
-}
 
-struct UserDataSourceManager {
-    let dict = ["com.lagou.lagouhr": AppInfo(name: "拉勾", locationIconString: "lagou_logo")]
-    static let shared = UserDataSourceManager()
-    var accessors : [Accessor] = [Accessor]()
-    var networks : [Network] = [Network]()
-    
-    func appInfo(boundId: String)-> AppInfo? {
-        guard let info = dict[boundId] else { return nil }
-        return info;
-    }
-    
-    
-    static func findCharsData(interval: NSInteger, type: String, dataSource: [Accessor])-> [CharsViewDataItem] {
-        let typeResult = dataSource.filter{$0.category ?? "" == type};
-        var firstTimeStamp = typeResult.first?.timeStamp
-        
-        if firstTimeStamp == nil {
-            return []
-        }
-        
-        var returnList = [CharsViewDataItem]()
-        for item in typeResult {
-            let key =  PrivateDataModelTools .stringConvertDate(string: item.timeStamp!, resultFormart: "HH:mm")
-            let currentInterval = PrivateDataModelTools.stringConvertTimeInterval(time1String: item.timeStamp!, time2String:firstTimeStamp )
-            if Int(currentInterval) < interval {
-                if let last = returnList.last {
-                    var item = CharsViewDataItem(key: key, value:1)
-                    item.value = last.value + 1
-                    if let index = returnList.firstIndex(where: {$0 == last}) {
-                        returnList[index] = item
-                    }
-                } else {
-                    returnList.append(CharsViewDataItem(key: key, value: 1))
-                }
-            } else {
-                firstTimeStamp = item.timeStamp
-                returnList.append(CharsViewDataItem(key: key, value: 1))
-            }
-        }
-        
-        return returnList;
-    }
-}
+

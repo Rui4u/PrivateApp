@@ -6,8 +6,7 @@
 //
 
 import XCTest
-@testable import PrivateApp
-
+//@testable import PrivateApp
 class PrivateAppTests: XCTestCase {
 
     override func setUpWithError() throws {

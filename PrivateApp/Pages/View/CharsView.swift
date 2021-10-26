@@ -10,32 +10,33 @@ import Charts
 
 struct CharsViewDataItem:Equatable {
     var key: String
-    var value: Int
+    var orginKey: String = ""
+    var value: Int = 1
+    var orginType: String
 }
 
 struct CharsView: View {
-    var dataSource: [CharsViewDataItem]
+    var dataSource: [String:[CharsViewDataItem]]
+    var waringTimes: Int
+    @State var showError: String = ""
     var body: some View {
-        CartesianChartView(dataSource: dataSource)
+        VStack(alignment: .leading) {
+            CartesianChartView(showError: $showError, waringTimes: waringTimes, dataSource: dataSource)
+            if showError.count > 0 {
+                Text(showError)
+                    .font(.system(size: 12))
+            }
+        }
     }
 }
-
-struct CharsView_Previews: PreviewProvider {
-    static var previews: some View {
-        CharsView(dataSource:  [CharsViewDataItem(key: "8:00", value: 1),
-                                CharsViewDataItem(key: "9:00", value: 2),
-                                CharsViewDataItem(key: "10:00", value: 3),
-                                CharsViewDataItem(key: "11:00", value: 4),
-                                CharsViewDataItem(key: "12:00", value: 5),
-                                CharsViewDataItem(key: "13:00", value: 6),
-                               ])
-    }
-}
-
 
 struct CartesianChartView: UIViewRepresentable {
+    @Binding var showError: String
+    var waringTimes: Int
+    var dataSource : [String:[CharsViewDataItem]]
+    
     let lineChartView = LineChartView.init();
-    var dataSource : [CharsViewDataItem]
+    
     class Cordinator : NSObject, ChartViewDelegate {
         
     }
@@ -92,25 +93,60 @@ struct CartesianChartView: UIViewRepresentable {
     
     func drawLineChart(){
         //            lineChartView.addLimitLine(250, "限制线");
-        let xValues = self.dataSource.map({ item in
-            return item.key
-        })
+
+        
+        var xValues = self.dataSource.values.flatMap { item in
+            return item
+        }.map{$0.key}
+        
+        xValues = xValues.filterDuplicates{$0}
+        xValues.sort()
+        
         if xValues.count == 0 {return}
         
         lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter.init(values: xValues);
         lineChartView.leftAxis.valueFormatter = IndexAxisValueFormatter.init();
         
-        var yDataArray1 = [ChartDataEntry]();
-        for i in 0...xValues.count-1 {
-            let entry = ChartDataEntry.init(x: Double(i), y: Double(dataSource[i].value));
-            yDataArray1.append(entry);
+        var errorString = ""
+        var dataSets = [LineChartDataSet]()
+        for key in dataSource.keys {
+            let lineDataSource = dataSource[key] ?? [];
+            var yDataArray1 = [ChartDataEntry]();
+            
+            for index in 0..<xValues.count {
+                let timeKey = xValues[index]
+                let valueList = lineDataSource.filter { item in
+                    item.key == timeKey
+                }
+                if let value = valueList.first {
+                    let maxValue = Double(value.value)
+                    let entry = ChartDataEntry.init(x: Double(index), y: maxValue);
+                    yDataArray1.append(entry);
+                    
+                    if Int(maxValue) >= waringTimes {
+                        errorString.append("\(value.orginType)"+"请求次数超过" + "\(Int(maxValue))" + "次" + "\n")
+                    }
+                }else {
+                    let entry = ChartDataEntry.init(x: Double(index), y: 0);
+                    yDataArray1.append(entry);
+                }
+            }
+            let set1 = LineChartDataSet.init(entries: yDataArray1, label: key);
+            let color = PrivateDataModelTools.subiconForLineColor(type: key)
+            set1.colors = [UIColor(color)]
+            set1.drawCirclesEnabled = false;//绘制转折点
+            set1.lineCapType = .round
+            set1.lineWidth = 1.0;
+            dataSets.append(set1)
+            
         }
-        let set1 = LineChartDataSet.init(entries: yDataArray1, label: "每分钟调用次数");
-        set1.colors = [UIColor.orange];
-        set1.drawCirclesEnabled = false;//绘制转折点
-        set1.lineWidth = 1.0;
-        
-        let data = LineChartData.init(dataSets: [set1]);
+                                          
+        if errorString.count > 0 {
+            DispatchQueue.main.async {
+                self.showError = errorString
+            }
+        }
+        let data = LineChartData.init(dataSets: dataSets);
         
         lineChartView.data = data;
         lineChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0, easingOption: .easeInBack);
@@ -119,4 +155,20 @@ struct CartesianChartView: UIViewRepresentable {
     }
 }
 
+
+
+extension Array {
+    
+    // 去重
+    func filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
+        var result = [Element]()
+        for value in self {
+            let key = filter(value)
+            if !result.map({filter($0)}).contains(key) {
+                result.append(value)
+            }
+        }
+        return result
+    }
+}
 

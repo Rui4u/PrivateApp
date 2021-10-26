@@ -85,17 +85,19 @@ struct PrivateLocationDetailListItem: View {
 
 struct ListHeaderIcon: View {
     var accessor: Accessor
+    @State var image: UIImage = UIImage()
     var body: some View {
         ZStack {
             GeometryReader { reader in
                 let width = reader.size.width
                 let height = reader.size.height
-                let appInfo = UserDataSourceManager.shared.appInfo(boundId: accessor.accessor!.identifier!)
-                Image(appInfo?.locationIconString ?? "")
-                    .resizable()
-                    .scaledToFit()
+                let urlString = UserDataSourceManager.appIconUrl(accessor: accessor)
+                IconImage(imageUrl:urlString)
                     .frame(width: width, height: height)
                     .position(x: width / 2, y: height / 2)
+                    .onAppear {
+                        fetchRemoteImage()
+                    }
                 Circle()
                     .fill(Color.white)
                     .frame(width: 20, height: 20)
@@ -111,6 +113,20 @@ struct ListHeaderIcon: View {
                     .position(x: width - 10, y: height - 10)
             }
         }
+    }
+    func fetchRemoteImage() //用来下载互联网上的图片
+    {
+        let appInfo = UserDataSourceManager.appInfo(boundId: accessor.accessor?.identifier ?? "")
+
+        guard let url = URL(string: appInfo?.logoUrl ?? "") else { return } //初始化一个字符串常量，作为网络图片的地址
+        URLSession.shared.dataTask(with: url){ (data, response, error) in //执行URLSession单例对象的数据任务方法，以下载指定的图片
+            if let image = UIImage(data: data!){
+                self.image = image //当图片下载成功之后，将下载后的数据转换为图像，并存储在remoteImage属性中
+            }
+            else{
+                print(error ?? "") //如果图片下载失败之后，则在控制台输出错误信息
+            }
+        }.resume() //通过执行resume方法，开始下载指定路径的网络图片
     }
 }
 

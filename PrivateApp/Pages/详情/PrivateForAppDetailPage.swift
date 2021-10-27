@@ -11,6 +11,17 @@ struct PrivateForAppDetailPage: View {
     let detailData: PrivateDataForAppModel
     var body: some View {
         List{
+            
+            let result = UserDataSourceManager.findChartsData(dataSource: detailData.accessors, onlyLastDay: true)
+            ZStack {
+                GeometryReader { reader in
+                    CharsView(dataSource: result,
+                              waringTimes: UserPreferencesManager.shared.warringTimes)
+                        .frame(width: reader.size.width, height: reader.size.height)
+                }
+            }
+            .frame(height: 300)
+            
             Section(header: Text("记录")) {
                 NavigationLink(destination: PrivateLocationDetailListPage(dataSource: detailData.accessors)){
                     HStack{
@@ -28,17 +39,6 @@ struct PrivateForAppDetailPage: View {
                     }
                 }
             }
-            
-            let result = UserDataSourceManager.findCharsData(dataSource: detailData.accessors, onlyLastDay: true)
-            ZStack {
-                GeometryReader { reader in
-                    CharsView(dataSource: result,
-                              waringTimes: UserPreferencesManager.shared.warringTimes)
-                        .frame(width: reader.size.width, height: reader.size.height)
-                }
-            }
-            .frame(height: 300)
-            
         }
         .navigationTitle(UserDataSourceManager.appName(boundId: detailData.boundID))
         .listStyle(GroupedListStyle())
@@ -53,7 +53,7 @@ struct PrivateForAppDetailPage: View {
 struct PrivateForAppDetailPage_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            PrivateForAppDetailPage(detailData: PrivateViewModel().allDataSourceForApp().first!).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
+            PrivateForAppPage().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
         } else {
             // Fallback on earlier versions
         }

@@ -25,7 +25,7 @@ struct LocationPrivateFileManager {
     static func find(key: String = "appInfo")-> [AppInfo] {
         //获取documenth路径
         if let result  = UserDefaults.standard.object(forKey: key) as? Data {
-            let a = try? NSKeyedUnarchiver.unarchiveObject(with: result) as? [Dictionary<String, String>]
+            let a = NSKeyedUnarchiver.unarchiveObject(with: result) as? [Dictionary<String, String>]
             var array = [AppInfo]()
             for item in a ?? [] {
                 array.append(AppInfo.DictToModel(dict: item))
@@ -35,8 +35,8 @@ struct LocationPrivateFileManager {
         return []
     }
     
-    // MARK: - Usage
-    static func searchLocationData() ->UserDataSourceManager {
+    // MARK: - 初始化数据
+    static func initializeData()  {
         
         var manager = UserDataSourceManager.shared
         
@@ -45,11 +45,11 @@ struct LocationPrivateFileManager {
         
         
         let path = Bundle.main.url(forResource: "App_Privacy_Report_v4_2021-10-18T15_51_10", withExtension: "ndjson")!
-        guard let iter = try? LineIterator(url: path) else {return manager}
+        guard let iter = try? LineIterator(url: path) else {return}
         for line in iter {
             print(line)
             let jsondata = line.data(using: .utf8)
-            guard let jsonObject =  try? JSONSerialization.jsonObject(with: jsondata!, options: .mutableContainers) as? [String: Any] else {return manager}
+            guard let jsonObject =  try? JSONSerialization.jsonObject(with: jsondata!, options: .mutableContainers) as? [String: Any] else {return}
             
             if let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) {
                 
@@ -76,7 +76,6 @@ struct LocationPrivateFileManager {
         }
         manager.accessors = accessors
         manager.networks = networks
-        return manager
     }
     
     // MARK: - Implementation

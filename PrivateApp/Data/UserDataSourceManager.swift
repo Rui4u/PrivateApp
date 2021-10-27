@@ -10,29 +10,24 @@ import SwiftUI
 
 
 
-class SortModel: ObservableObject {
-    enum SortModelType {
-        case name
-        case locatioCount
-        case none
-    }
-    @Published var sortByType : SortModelType = .none
-    @Published var filterByName : String = ""
-}
-
-struct UserDataSourceManager {
+class UserDataSourceManager {
     
-    static var shared = UserDataSourceManager()
+    static let shared = UserDataSourceManager()
+    /// 隐私数据
     var accessors : [Accessor] = [Accessor]()
+    /// 网络数据
     var networks : [Network] = [Network]()
+    /// App信息
     var appInfos: [AppInfo] = LocationPrivateFileManager.find()
+    /// 记录所有appids
     var appBoundIds = Set<String>()
   
-    
+    /// 获取app信息
     static func appInfo(boundId: String)-> AppInfo? {
        return UserDataSourceManager.shared.appInfos.filter{$0.boundId == boundId}.first
     }
     
+    /// 获取appName
     static func appName(boundId: String? = nil, accessor: Accessor? = nil)-> String {
         guard let boundId = boundId else {
             guard let accessor = accessor else {
@@ -43,6 +38,7 @@ struct UserDataSourceManager {
         return self.appInfo(boundId: boundId)?.name ?? boundId
     }
     
+    /// 获取appIconUrl
     static func appIconUrl(boundId: String? = nil, accessor: Accessor? = nil)-> String {
         guard let boundId = boundId else {
             guard let accessor = accessor else {
@@ -53,8 +49,8 @@ struct UserDataSourceManager {
         return self.appInfo(boundId: boundId)?.logoUrl ?? ""
     }
     
-    
-    static func findCharsData(dataSource: [Accessor], type: String = "" , onlyLastDay: Bool = false , interval: NSInteger = 60)-> [String : [CharsViewDataItem]] {
+    /// 获取图标信息
+    static func findChartsData(dataSource: [Accessor], type: String = "" , onlyLastDay: Bool = false , interval: NSInteger = 60)-> [String : [CharsViewDataItem]] {
         
         guard let lastTimeStamp = dataSource.last?.timeStamp else {
             return [:]
@@ -108,5 +104,38 @@ struct UserDataSourceManager {
         
         return returnDict;
     }
+    
+    /// 针对app的所有请求
+    func allDataSourceForApp() -> Array<PrivateDataForAppModel>{
+        LocationPrivateFileManager.initializeData()
+        
+        var dict = Dictionary<String,[Accessor]>()
+        for item in accessors {
+            let key = item.accessor!.identifier!
+            var list = (dict[key] != nil) ? dict[key]! : [Accessor]()
+            list.append(item)
+            dict[key] = list
+        }
+        
+        var dict2 = Dictionary<String,[Network]>()
+        for item in networks {
+            let key = item.bundleID!
+            var list = (dict2[key] != nil) ? dict2[key]! : [Network]()
+            list.append(item)
+            dict2[key] = list
+        }
+        
+        
+        var result = [PrivateDataForAppModel]()
+        for key in dict.keys {
+            let accessors = dict[key] ?? [Accessor]()
+            let networks = dict2[key] ?? [Network]()
+            let locationNums = accessors.count
+            let netNums = networks.count
+            result.append(PrivateDataForAppModel(accessors: accessors, networks: networks, boundID: key,netWorkNums: netNums,locationNums: locationNums))
+        }
+        return result
+    }
+    
     
 }

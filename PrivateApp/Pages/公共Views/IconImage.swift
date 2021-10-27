@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct IconImage: View {
-    @State private var image: UIImage = UIImage(systemName: "square.dashed") ?? UIImage()
+    @State private var uiImage: UIImage? = nil
+    let placeholderImage = UIImage(systemName: "square.dashed")!
+    
     var imageUrl: String? = ""
     var body: some View {
         ZStack {
-            Image(uiImage: image)
+            Image(uiImage: self.uiImage ?? placeholderImage)
                 .resizable()
                 .frame(width: 40, height: 40)
                 .cornerRadius(4)
@@ -26,18 +28,13 @@ struct IconImage: View {
     func fetchRemoteImage(url:String?) //用来下载互联网上的图片
     {
         guard let url = URL(string: url ?? "") else {return } //初始化一个字符串常量，作为网络图片的地址
-        DispatchQueue.global().async {
-            URLSession.shared.dataTask(with: url){ (data, response, error) in //执行URLSession单例对象的数据任务方法，以下载指定的图片
-                if let image = UIImage(data: data!){
-                    DispatchQueue.main.async {
-                        self.image = image //当图片下载成功之后，将下载后的数据转换为图像，并存储在remoteImage属性中
-                    }
-                }
-                else{
-                    print(error ?? "") //如果图片下载失败之后，则在控制台输出错误信息
-                }
-            }.resume() //通过执行resume方法，开始下载指定路径的网络图片
-        }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let image = UIImage(data: data) {
+                self.uiImage = image
+            }else {
+                print("error: \(String(describing: error))")
+            }
+        }.resume()
     }
 }
 

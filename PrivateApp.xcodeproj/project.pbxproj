@@ -75,6 +75,7 @@
 		55AAEA952726D04A00B721E6 /* LocationPrivateFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPrivateFileManager.swift; sourceTree = "<group>"; };
 		55AAEA9E2727EC6800B721E6 /* IconImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
 		55AAEAA02727F0E800B721E6 /* UserPreferencesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesManager.swift; sourceTree = "<group>"; };
+		55C0826B27282030009BDA28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5EE4660733FCFCC2AC900E3C /* Pods-PrivateApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrivateApp.debug.xcconfig"; path = "Target Support Files/Pods-PrivateApp/Pods-PrivateApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6DBC56363ECCBA17DDAAB4AE /* Pods-PrivateApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrivateApp.release.xcconfig"; path = "Target Support Files/Pods-PrivateApp/Pods-PrivateApp.release.xcconfig"; sourceTree = "<group>"; };
 		AD8E3EB032475370097C19E1 /* libPods-PrivateApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrivateApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +150,7 @@
 		55A5D13C271EE7DB00BCE39D /* PrivateApp */ = {
 			isa = PBXGroup;
 			children = (
+				55C0826B27282030009BDA28 /* Info.plist */,
 				5509FE122720185C0053F053 /* Tools */,
 				55A5D16D271EE80600BCE39D /* Pages */,
 				55A5D16C271EE7FE00BCE39D /* Data */,
@@ -562,14 +564,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PrivateApp/Preview Content\"";
+				DEVELOPMENT_TEAM = 9SM75PAX9D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PrivateApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -592,14 +596,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PrivateApp/Preview Content\"";
+				DEVELOPMENT_TEAM = 9SM75PAX9D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PrivateApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

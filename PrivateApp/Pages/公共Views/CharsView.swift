@@ -18,20 +18,48 @@ struct CharsViewDataItem:Equatable {
 struct CharsView: View {
     var dataSource: [String:[CharsViewDataItem]]
     var waringTimes: Int
-    @State var showError: String = ""
+    @State var showError: [(String, String)] = []
     var body: some View {
         VStack(alignment: .leading) {
-            CartesianChartView(showError: $showError, waringTimes: waringTimes, dataSource: dataSource)
+            CartesianChartView(showError: $showError,
+                               waringTimes: waringTimes,
+                               dataSource: dataSource)
+                .frame(minHeight:300)
             if showError.count > 0 {
-                Text(showError)
+                VStack {
+                    ForEach(showError, id:\.self.1.hashValue) { line in
+                        CharsViewWarningItem(item: line)
+                    }
                     .font(.system(size: 12))
+                }
             }
         }
     }
 }
 
+struct CharsViewWarningItem: View {
+    var item : (String, String)
+    var body: some View {
+        HStack {
+            Text(item.0)
+            Spacer()
+            Text(item.1)
+        }
+        .padding()
+        .background(Color(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0))
+        .cornerRadius(4)
+    }
+}
+
+struct CharsViewWarningItem_Previews: PreviewProvider {
+    static var previews: some View {
+        CharsViewWarningItem(item:("位置信息","10.20"))
+    }
+}
+
+
 struct CartesianChartView: UIViewRepresentable {
-    @Binding var showError: String
+    @Binding var showError: [(String, String)]
     var waringTimes: Int
     var dataSource : [String:[CharsViewDataItem]]
     
@@ -94,7 +122,6 @@ struct CartesianChartView: UIViewRepresentable {
     func drawLineChart(){
         //            lineChartView.addLimitLine(250, "限制线");
 
-        
         var xValues = self.dataSource.values.flatMap { item in
             return item
         }.map{$0.key}
@@ -107,11 +134,12 @@ struct CartesianChartView: UIViewRepresentable {
         lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter.init(values: xValues);
         lineChartView.leftAxis.valueFormatter = IndexAxisValueFormatter.init();
         
-        var errorString = ""
+        var errorString = [(String, String)]()
         var dataSets = [LineChartDataSet]()
         for key in dataSource.keys {
             let lineDataSource = dataSource[key] ?? [];
             var yDataArray1 = [ChartDataEntry]();
+            let iconInfo = PrivateType.iconInfo(rawValue:key)
             
             for index in 0..<xValues.count {
                 let timeKey = xValues[index]
@@ -124,16 +152,18 @@ struct CartesianChartView: UIViewRepresentable {
                     yDataArray1.append(entry);
                     
                     if Int(maxValue) >= waringTimes {
-                        errorString.append("\(value.orginType)"+"请求次数超过" + "\(Int(maxValue))" + "次" + "\n")
+                        let string1 = "❗️" + "\(iconInfo.name!) " + "请求次数为" + "\(Int(maxValue))" + "次"
+                        let string2 = timeKey;
+                        errorString.append((string1, string2))
                     }
                 }else {
                     let entry = ChartDataEntry.init(x: Double(index), y: 0);
                     yDataArray1.append(entry);
                 }
             }
-            let set1 = LineChartDataSet.init(entries: yDataArray1, label: key);
-            let color = PrivateDataModelTools.subiconForLineColor(type: key)
-            set1.colors = [UIColor(color)]
+            
+            let set1 = LineChartDataSet.init(entries: yDataArray1, label: iconInfo.name);
+            set1.colors = [UIColor(iconInfo.lineColor)]
             set1.drawCirclesEnabled = false;//绘制转折点
             set1.lineCapType = .round
             set1.lineWidth = 1.0;

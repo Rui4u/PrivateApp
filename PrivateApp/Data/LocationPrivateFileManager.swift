@@ -44,10 +44,9 @@ struct LocationPrivateFileManager {
         var networks : [Network] = [Network]()
         
         
-        let path = Bundle.main.url(forResource: "App_Privacy_Report_v4_2021-10-18T15_51_10", withExtension: "ndjson")!
+        let path = Bundle.main.url(forResource: "App_Privacy_Report_v4_2021-10-28T17_21_59(1)", withExtension: "ndjson")!
         guard let iter = try? LineIterator(url: path) else {return}
         for line in iter {
-            print(line)
             let jsondata = line.data(using: .utf8)
             guard let jsonObject =  try? JSONSerialization.jsonObject(with: jsondata!, options: .mutableContainers) as? [String: Any] else {return}
             

@@ -6,15 +6,75 @@
 //
 
 import SwiftUI
+
+typealias PrivateType = PrivateDataModelTools.LocationType
+
 struct PrivateDataModelTools {
+    struct IconInfo {
+        var permissionsIconString: String
+        var permissionsIconForegroundColor: Color
+        var orginName: String
+        var lineColor: Color
+        
+        private var _name :String?
+        var name: String? {
+            set {
+                _name = newValue
+            }
+            get {
+                guard let _name = _name else {
+                    return orginName
+                }
+                return _name
+            }
+        }
+        
+        init(permissionsIconString : String, permissionsIconForegroundColor: Color, name: String? = nil, orginName:String, lineColor: Color) {
+            self.permissionsIconString = permissionsIconString
+            self.permissionsIconForegroundColor = permissionsIconForegroundColor
+            self.lineColor = lineColor
+            self.orginName = orginName
+            
+            self.name = name
+        }
+    }
+    
+    enum LocationType: String {
+        case location = "location"
+        case photos = "photos"
+        case camera = "camera"
+        case microphone = "microphone"
+        case none
+        
+        static func iconInfo(rawValue: String) -> IconInfo {
+            let type = LocationType(rawValue: rawValue)
+            guard let type = type else {
+                return LocationType.none.iconInfo()
+            }
+
+            return type.iconInfo()
+        }
+        
+        private func iconInfo() -> IconInfo {
+            switch self {
+            case .location:
+                return IconInfo(permissionsIconString: "location.fill", permissionsIconForegroundColor:.blue ,name: "定位", orginName: self.rawValue, lineColor: .blue)
+            case .photos:
+                return IconInfo(permissionsIconString: "photo.on.rectangle", permissionsIconForegroundColor:.green ,name: "相册", orginName: self.rawValue, lineColor: .green)
+            case .camera:
+                return IconInfo(permissionsIconString: "camera", permissionsIconForegroundColor:.black ,name: "照相机", orginName: self.rawValue, lineColor: .black)
+            case .microphone:
+                return IconInfo(permissionsIconString: "mic", permissionsIconForegroundColor:.orange ,name: "麦克风", orginName: self.rawValue, lineColor: .orange)
+            case .none:
+                return IconInfo(permissionsIconString: "square.and.arrow.up.circle", permissionsIconForegroundColor:.orange, orginName: self.rawValue, lineColor: .orange)
+            }
+        }
+    }
+
     static func conversionEnglishToChinese(_ string: String?) -> String {
         guard let string = string else {
             return ""
         }
-        if string == "location" {
-            return "位置"
-        }
-        
         if string == "intervalBegin" {
             return "时间开始"
         }
@@ -22,56 +82,9 @@ struct PrivateDataModelTools {
         if string == "intervalEnd" {
             return "时间结束"
         }
-        
-        if string == "access" {
-            return "访问"
-        }
-        if string == "photos" {
-            return "相册"
-        }
-        
-        if string == "camera" {
-            return "相机"
-        }
         return string
     }
-    
-    static func subiconForHeadIcon(type: String) -> Image {
-        if type == "location" {
-            return Image(systemName: "location.fill")
-        }
-        
-        if type == "photos" {
-            return Image(systemName: "photo.on.rectangle")
-        }
-        
-        if type == "camera" {
-            return Image(systemName: "camera")
-            
-        }
-        return Image(systemName: "1")
-    }
- 
-    static func subiconForLineColor(type: String) -> Color {
-        if type == "location" {
-            return .blue
-        }
-        
-        if type == "photos" {
-            return .red
-        }
-        
-        if type == "camera" {
-            return .orange
-            
-        }
-        
-        if type == "microphone" {
-            return .green
-        }
-        
-        return .gray
-    }
+  
     
     static func stringConvertDate(string:String, resultFormart:String, dateFormat:String="yyyy-MM-dd'T'HH:mm:ss.SSSxxx") -> String {
         let formatter = DateFormatter.init()
@@ -104,7 +117,7 @@ struct PrivateDataModelTools {
      }
     
     
-    /// 计算时间差   返回为秒
+    /// 是否为同一天
     static func timeIsOnSameDay(time1String:String?,time2String: String?, dateFormat:String="yyyy-MM-dd'T'HH:mm:ss.SSSxxx") -> Bool {
         
         guard let time1String = time1String else {

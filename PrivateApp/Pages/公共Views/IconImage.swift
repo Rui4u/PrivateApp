@@ -14,14 +14,21 @@ struct IconImage: View {
     var imageUrl: String? = ""
     var body: some View {
         ZStack {
-            Image(uiImage: self.uiImage ?? placeholderImage)
-                .resizable()
-                .frame(width: 40, height: 40)
-                .cornerRadius(4)
-                .foregroundColor(.blue)
-                .onAppear {
-                    fetchRemoteImage(url: imageUrl)
-                }
+            if self.uiImage != nil {
+                Image(uiImage: self.uiImage!)
+                    .resizable()
+                    .cornerRadius(8)
+            } else {
+                Image(systemName: "square.dashed")
+                    .resizable()
+                    .foregroundColor(Color.blue)
+            }
+        }
+        
+        .frame(width: 40, height: 40)
+        .cornerRadius(4)
+        .onAppear {
+            fetchRemoteImage(url: imageUrl)
         }
     }
     

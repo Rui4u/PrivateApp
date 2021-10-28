@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct AppInfo :Hashable{
-    var name: String
+    var name: String?
     var logoUrl: String
     var boundId: String
     var isRequested: Bool = false
@@ -24,7 +24,7 @@ struct AppInfo :Hashable{
     }
     
     static func DictToModel(dict: Dictionary<String, String>)-> AppInfo {
-        return AppInfo(name: dict["name"] ?? "", logoUrl: dict["logoUrl"] ?? "", boundId: dict["boundId"] ?? "", isRequested: Bool(dict["isRequested"] ?? "") ?? true)
+        return AppInfo(name: dict["name"], logoUrl: dict["logoUrl"] ?? "", boundId: dict["boundId"] ?? "", isRequested: Bool(dict["isRequested"] ?? "") ?? true)
     }
 }
 

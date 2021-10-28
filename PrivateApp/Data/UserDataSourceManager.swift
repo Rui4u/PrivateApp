@@ -127,7 +127,9 @@ class UserDataSourceManager {
         
         
         var result = [PrivateDataForAppModel]()
-        for key in dict.keys {
+        
+        for key in dict.keys.sorted(by: {$0
+            .localizedStandardCompare($1) == ComparisonResult.orderedAscending}) { //默认字符串排序
             let accessors = dict[key] ?? [Accessor]()
             let networks = dict2[key] ?? [Network]()
             let locationNums = accessors.count

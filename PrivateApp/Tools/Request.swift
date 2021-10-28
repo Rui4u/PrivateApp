@@ -39,11 +39,10 @@ class Request {
                         let dic:NSDictionary = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary;
                         
                         print(dic)
-                        var results = dic["results"] as? Array<Dictionary<String, Any>>
+                        let results = dic["results"] as? Array<Dictionary<String, Any>>
                         let result = results?.first
                         let iconUrl = result?["artworkUrl100"] as? String ?? ""
-                        let name = result?["trackName"]  as? String ?? ""
-                        let bundleId = result?["bundleId"]  as? String ?? ""
+                        let name = result?["trackName"] as? String
                         
                         var appInfo = AppInfo(name: name, logoUrl: iconUrl, boundId: boundId)
                         appInfo.isRequested = boundId.count > 0

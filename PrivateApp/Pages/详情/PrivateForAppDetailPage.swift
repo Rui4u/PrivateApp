@@ -9,18 +9,13 @@ import SwiftUI
 
 struct PrivateForAppDetailPage: View {
     let detailData: PrivateDataForAppModel
+    var warringTimes: Int = 0
     var body: some View {
         List{
             
             let result = UserDataSourceManager.findChartsData(dataSource: detailData.accessors, onlyLastDay: true)
-            ZStack {
-                GeometryReader { reader in
-                    CharsView(dataSource: result,
-                              waringTimes: UserPreferencesManager.shared.warringTimes)
-                        .frame(width: reader.size.width, height: reader.size.height)
-                }
-            }
-            .frame(height: 300)
+            CharsView(dataSource: result,
+                      waringTimes: warringTimes)
             
             Section(header: Text("记录")) {
                 NavigationLink(destination: PrivateLocationDetailListPage(dataSource: detailData.accessors)){

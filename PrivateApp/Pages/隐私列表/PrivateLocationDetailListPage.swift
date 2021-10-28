@@ -28,7 +28,8 @@ struct PrivateLocationDetailListPage: View {
 
 struct PrivateLocationDetailListPage_Previews: PreviewProvider {
     static var previews: some View {
-        PrivateForAppPage().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
+        PrivateLocationDetailListPage(
+            dataSource: TestDataMangaer.accessors()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
     }
 }
 

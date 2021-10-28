@@ -11,6 +11,7 @@ import SwiftUI
 struct PrivateLocationDetailListItem: View {
     var accessor: Accessor
     var body: some View {
+        let iconInfo = PrivateType.iconInfo(rawValue:accessor.category!)
         VStack(alignment: .leading) {
             HStack{
                 ListHeaderIcon(accessor: accessor)
@@ -23,7 +24,7 @@ struct PrivateLocationDetailListItem: View {
                         
                         Text(beginTime + "-" + endTime).font(.subheadline)
                         HStack() {
-                            Text(PrivateDataModelTools.conversionEnglishToChinese(accessor.category))
+                            Text(iconInfo.name!)
                                 .fontWeight(.heavy)
                             Text(PrivateDataModelTools.conversionEnglishToChinese(accessor.type))
                             Spacer()
@@ -32,7 +33,7 @@ struct PrivateLocationDetailListItem: View {
                     } else {
                         Text(beginTime)
                         HStack {
-                            Text(PrivateDataModelTools.conversionEnglishToChinese(accessor.category))
+                            Text(iconInfo.name!)
                                 .fontWeight(.heavy)
                             Text(PrivateDataModelTools.conversionEnglishToChinese(accessor.kind))
                             Text(PrivateDataModelTools.conversionEnglishToChinese(accessor.type))
@@ -48,6 +49,7 @@ struct PrivateLocationDetailListItem: View {
 struct ListHeaderIcon: View {
     var accessor: Accessor
     var body: some View {
+        let iconInfo = PrivateType.iconInfo(rawValue:accessor.category!)
         ZStack {
             GeometryReader { reader in
                 let width = reader.size.width
@@ -57,26 +59,26 @@ struct ListHeaderIcon: View {
                     .frame(width: width, height: height)
                     .position(x: width / 2, y: height / 2)
                 Circle()
-                    .fill(Color.white)
-                    .frame(width: 20, height: 20)
+                    .fill(iconInfo.permissionsIconForegroundColor)
+                    .frame(width: 16, height: 16)
                     .overlay(
                         ZStack {
-                            PrivateDataModelTools.subiconForHeadIcon(type: accessor.category!)
+                            Image(systemName: iconInfo.permissionsIconString)
                                 .resizable()
                                 .scaledToFit()
-                                .foregroundColor(.blue)
+                                .foregroundColor(.white)
                                 .frame(width: 10, height: 10)
                         }
                     )
-                    .position(x: width - 10, y: height - 10)
+                    .position(x: width - 6, y: height - 6)
             }
         }
     }
 
 }
 
-//struct ListHeaderIcon_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ListHeaderIcon()
-//    }
-//}
+struct ListHeaderIcon_Previews: PreviewProvider {
+    static var previews: some View {
+        PrivateLocationDetailListItem(accessor: TestDataMangaer.accessor())
+    }
+}

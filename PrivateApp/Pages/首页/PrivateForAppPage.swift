@@ -13,11 +13,16 @@ struct PrivateForAppPage: View {
 
     @State private var showMeumView = false
     @ObservedObject var sortModel = UserPreferencesManager.shared.sortModel
+    @State var warringTimes = UserPreferencesManager.shared.warringTimes
     
     var body: some View {
+        
         NavigationView() {
             ZStack (alignment: .leading){
-               PrivateForAppList(sortModel: sortModel,dataSource: dataSource)
+                PrivateForAppList(sortModel: sortModel,
+                                  warringTimes: $warringTimes,
+                                  dataSource: dataSource)
+                    .disabled(showMeumView)
                     .navigationBarTitle("Navigation", displayMode: .inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -33,7 +38,7 @@ struct PrivateForAppPage: View {
                 GeometryReader { reader in
                     let width = reader.size.width
                     let height = reader.size.height
-                    PrivateForAppMenuView(showMeumView: $showMeumView, sortModel: sortModel)
+                    PrivateForAppMenuView(showMeumView: $showMeumView,waringTimes: $warringTimes, sortModel: sortModel)
                         .frame(width: 300, height: height)
                         .position(x: showMeumView ? width - 150 : width + 300, y: height / 2)
                     

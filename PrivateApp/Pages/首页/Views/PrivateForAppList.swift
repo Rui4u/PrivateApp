@@ -10,27 +10,18 @@ import SwiftUI
 
 struct PrivateForAppList: View {
     @ObservedObject var sortModel : SortModel
+    @Binding var warringTimes: String
     let dataSource : [PrivateDataForAppModel]
-    
     var body: some View {
         VStack {
-            SearchBar(text: $sortModel.filterByName)
-            
+            SearchBar(title: $sortModel.filterByName)
             List() {
                 ForEach(filterList(),id:\.self) { item in
-                    NavigationLink(destination: PrivateForAppDetailPage(detailData: item)){
+                    NavigationLink(destination: PrivateForAppDetailPage(detailData: item, warringTimes:Int(warringTimes) ?? 0)){
                         PrivateForAppPageListItem(item: item)
                     }
                 }
             }
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 1, coordinateSpace: .local) // can be changed to simultaneous gesture to work with buttons
-                    .onChanged { value in
-                        
-                    }
-                    .onEnded { value in
-                        hideKeyboard()
-                    })
             .refreshable {
                 hideKeyboard()
             }
@@ -46,11 +37,11 @@ struct PrivateForAppList: View {
                 return item.boundID.contains(sortModel.filterByName)
             }
         }).sorted { (item1, item2) in
-            if sortModel.sortByType == .name {
+            if sortModel.sortType == .name {
                 let a = item1
                     .boundID.localizedStandardCompare(item2.boundID) == ComparisonResult.orderedAscending
                 return a
-            } else if sortModel.sortByType == .locatioCount {
+            } else if sortModel.sortType == .locatioCount {
                 return item1.locationNums > item2.locationNums
             }
             return true

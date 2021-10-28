@@ -41,6 +41,8 @@ struct CharsViewWarningItem: View {
     var item : (String, String)
     var body: some View {
         HStack {
+            Image(systemName: "hand.raised.circle.fill")
+                .foregroundColor(.red)
             Text(item.0)
             Spacer()
             Text(item.1)
@@ -152,7 +154,7 @@ struct CartesianChartView: UIViewRepresentable {
                     yDataArray1.append(entry);
                     
                     if Int(maxValue) >= waringTimes {
-                        let string1 = "❗️" + "\(iconInfo.name!) " + "请求次数为" + "\(Int(maxValue))" + "次"
+                        let string1 = "\(iconInfo.name!) " + "请求次数为" + "\(Int(maxValue))" + "次"
                         let string2 = timeKey;
                         errorString.append((string1, string2))
                     }

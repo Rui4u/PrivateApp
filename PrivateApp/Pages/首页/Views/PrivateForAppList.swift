@@ -64,14 +64,31 @@ struct PrivateForAppPageListItem: View {
             }
             Spacer()
             VStack {
-                HStack {
-                    Text("\(item.locationNums)").frame(minWidth: 30, alignment: .trailing)
-                    Image(systemName: "hand.raised.slash").foregroundColor(.red)
-                }
-                HStack {
-                    Text("\(item.netWorkNums)").frame(minWidth: 30, alignment: .trailing)
-                    Image(systemName: "network").foregroundColor(.blue)
-                }
+                RightItem(imageString:  "network",
+                          imageColor: .blue,
+                          title: "\(item.netWorkNums)");
+                Spacer()
+                RightItem(imageString:"hand.raised.slash",
+                          imageColor: .red,
+                          title: "\(item.locationNums)");
+            }
+        }
+    }
+    
+    struct RightItem: View {
+        var imageString: String
+        var imageColor: Color
+        var title: String
+        
+        var body: some View {
+            HStack {
+                Text(title)
+                    .frame(minWidth: 30, alignment: .trailing)
+                    .font(.system(size: 16))
+                Image(systemName:imageString)
+                    .resizable()
+                    .frame(width: 14, height: 14)
+                    .foregroundColor(imageColor)
             }
         }
     }
@@ -82,3 +99,4 @@ struct PrivateForAppPageListItem: View {
 //        PrivateForAppList()
 //    }
 //}
+

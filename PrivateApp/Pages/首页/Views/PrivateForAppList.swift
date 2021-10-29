@@ -32,7 +32,7 @@ struct PrivateForAppList: View {
                 }
             }
             .refreshable {
-                self.reloadList(path: manager.path)
+//                self.reloadList(path: manager.path)
                 hideKeyboard()
             }
         }.onAppear {

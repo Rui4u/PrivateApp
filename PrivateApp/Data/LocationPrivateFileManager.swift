@@ -35,47 +35,47 @@ struct LocationPrivateFileManager {
         return []
     }
     
+    
+       
     // MARK: - 初始化数据
-    static func initializeData()  {
-        
-        var manager = UserDataSourceManager.shared
-        
-        var accessors : [Accessor] = [Accessor]()
-        var networks : [Network] = [Network]()
-        
-        
-        let path = Bundle.main.url(forResource: "App_Privacy_Report_v4_2021-10-28T17_21_59(1)", withExtension: "ndjson")!
-        guard let iter = try? LineIterator(url: path) else {return}
-        for line in iter {
-            let jsondata = line.data(using: .utf8)
-            guard let jsonObject =  try? JSONSerialization.jsonObject(with: jsondata!, options: .mutableContainers) as? [String: Any] else {return}
-            
-            if let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) {
-                
-                if jsonObject["domain"] != nil {
-                    if let product = try? JSONDecoder().decode(Network.self, from: jsonData) {
-                        networks.append(product)
-                    }
-                }else if let product = try? JSONDecoder().decode(Accessor.self, from: jsonData) {
-                    
-                    var ischange = false;
-                    accessors = accessors.map { item in
-                        var item = item
-                        if (item.identifier == product.identifier) {
-                            item.endTimeStamp = product.timeStamp;
-                            ischange = true;
+    static func initializeData(path url: URL, complete: @escaping ([Accessor], [Network])->()) -> Void {
+        DispatchQueue.global().async {
+            var accessors : [Accessor] = [Accessor]()
+            var networks : [Network] = [Network]()
+
+            guard let path = url as URL? else { return }
+            guard let iter = try? LineIterator(url: path) else {return}
+            for line in iter {
+                let jsondata = line.data(using: .utf8)
+                guard let jsonObject =  try? JSONSerialization.jsonObject(with: jsondata!, options: .mutableContainers) as? [String: Any] else {return}
+
+                if let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) {
+
+                    if jsonObject["domain"] != nil {
+                        if let product = try? JSONDecoder().decode(Network.self, from: jsonData) {
+                            networks.append(product)
                         }
-                        return item
-                    }
-                    if !ischange {
-                        accessors.append(product)
+                    }else if let product = try? JSONDecoder().decode(Accessor.self, from: jsonData) {
+
+                        var ischange = false;
+                        accessors = accessors.map { item in
+                            var item = item
+                            if (item.identifier == product.identifier) {
+                                item.endTimeStamp = product.timeStamp;
+                                ischange = true;
+                            }
+                            return item
+                        }
+                        if !ischange {
+                            accessors.append(product)
+                        }
                     }
                 }
             }
+            complete(accessors, networks)
         }
-        manager.accessors = accessors
-        manager.networks = networks
     }
+
     
     // MARK: - Implementation
     class LineIterator: Sequence, IteratorProtocol {

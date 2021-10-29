@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchBar: View {
     @State var showCancelButton = false
     @Binding var title: String
-    
+
     var body: some View {
         HStack {
             HStack {
@@ -21,7 +21,7 @@ struct SearchBar: View {
                 }, onCommit: {
                     print("onCommit")
                 }).foregroundColor(.primary)
-                
+                    
                 Button(action: {
                     title = ""
                 }) {

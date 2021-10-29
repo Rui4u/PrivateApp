@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct PrivateAppApp: App {
-    let persistenceController = PersistenceController.shared
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject var appDataSourceManager = UserDataSourceManager.shared
     var body: some Scene {
         WindowGroup {
-            PrivateForAppPage()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            PrivateForAppPage().environmentObject(appDataSourceManager)
         }
     }
     

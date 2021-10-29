@@ -6,42 +6,64 @@
 //
 
 import SwiftUI
-
-
+import Combine
 struct PrivateForAppList: View {
-    @ObservedObject var sortModel : SortModel
-    @Binding var warringTimes: String
-    let dataSource : [PrivateDataForAppModel]
+    @EnvironmentObject var manager: UserDataSourceManager
+    @State var searchTitle =  ""
     var body: some View {
         VStack {
-            SearchBar(title: $sortModel.filterByName)
+            SearchBar(title: $searchTitle)
+                .onReceive(searchTitle.publisher.reduce("", { t, c in
+                    return t + String(c)
+                })) { text in
+                    if manager.filterByName != text {
+                        manager.filterByName = text
+                    }
+                }
+            
             List() {
                 ForEach(filterList(),id:\.self) { item in
-                    NavigationLink(destination: PrivateForAppDetailPage(detailData: item, warringTimes:Int(warringTimes) ?? 0)){
+                    NavigationLink(destination:
+                                    PrivateForAppDetailPage(detailData: item,
+                                                            warringTimes:manager.warringTimes)
+                    ) {
                         PrivateForAppPageListItem(item: item)
                     }
                 }
             }
             .refreshable {
+                self.reloadList(path: manager.path)
                 hideKeyboard()
             }
+        }.onAppear {
+            let sink = Subscribers.Sink<String, Never>(receiveCompletion: { item in
+            }, receiveValue: {item in
+                reloadList(path: item)
+            })
+            UserDataSourceManager.shared.$path.subscribe(sink)
+        }
+    }
+    
+    func reloadList(path : String) {
+        UserDataSourceManager.shared.allDataSourceForApp(path:path ) { result in
+            manager.appListDataSource = result
         }
     }
     
     /// 筛选list
     func filterList() ->[PrivateDataForAppModel] {
-        dataSource.filter({ item in
-            if sortModel.filterByName.count == 0 {
+        manager.appListDataSource.filter({ item in
+            if manager.filterByName.count == 0 {
                 return true;
             } else {
-                return item.boundID.contains(sortModel.filterByName)
+                return item.boundID.contains(manager.filterByName)
             }
         }).sorted { (item1, item2) in
-            if sortModel.sortType == .name {
+            if manager.sortType == .name {
                 let a = item1
                     .boundID.localizedStandardCompare(item2.boundID) == ComparisonResult.orderedAscending
                 return a
-            } else if sortModel.sortType == .locatioCount {
+            } else if manager.sortType == .locatioCount {
                 return item1.locationNums > item2.locationNums
             }
             return true

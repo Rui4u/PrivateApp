@@ -1,16 +1,30 @@
 //
-//  UserDataSourceManager.swift
+//  UserPreferencesManager.swift
 //  PrivateApp
 //
-//  Created by sharui on 2021/10/25.
+//  Created by sharui on 2021/10/26.
 //
 
 import Foundation
 import SwiftUI
 
+typealias SortType = SortModel.SortType
+typealias SortByType = SortModel.SortByType
 
+class SortModel: ObservableObject {
+    enum SortType: String {
+        case name = "名称"
+        case locatioCount = "隐私访问数量"
+        case none
+    }
+    
+    enum SortByType: String {
+        case up = "升序"
+        case down = "降序"
+    }
+}
 
-class UserDataSourceManager {
+class UserDataSourceManager: ObservableObject {
     
     static let shared = UserDataSourceManager()
     /// 隐私数据
@@ -22,6 +36,14 @@ class UserDataSourceManager {
     /// 记录所有appids
     var appBoundIds = Set<String>()
   
+    @Published var path: String = ""
+    @Published var appListDataSource: [PrivateDataForAppModel] = []
+    @Published var sortType : SortType = .name
+    @Published var sortByType : SortByType = .up
+    
+    @Published var filterByName : String = ""
+    @Published var warringTimes: Int = 10
+    
     /// 获取app信息
     static func appInfo(boundId: String)-> AppInfo? {
        return UserDataSourceManager.shared.appInfos.filter{$0.boundId == boundId}.first
@@ -106,38 +128,44 @@ class UserDataSourceManager {
     }
     
     /// 针对app的所有请求
-    func allDataSourceForApp() -> Array<PrivateDataForAppModel>{
-        LocationPrivateFileManager.initializeData()
-        
-        var dict = Dictionary<String,[Accessor]>()
-        for item in accessors {
-            let key = item.accessor!.identifier!
-            var list = (dict[key] != nil) ? dict[key]! : [Accessor]()
-            list.append(item)
-            dict[key] = list
+    func allDataSourceForApp(path: String?, complete: @escaping (Array<PrivateDataForAppModel>)->()) -> Void{
+        guard let path = URL(string: path ?? "")else {
+            complete([PrivateDataForAppModel]())
+            return;
         }
+
         
-        var dict2 = Dictionary<String,[Network]>()
-        for item in networks {
-            let key = item.bundleID!
-            var list = (dict2[key] != nil) ? dict2[key]! : [Network]()
-            list.append(item)
-            dict2[key] = list
+        LocationPrivateFileManager.initializeData(path: path) { accessors, networks in
+            var dict = Dictionary<String,[Accessor]>()
+            for item in accessors {
+                let key = item.accessor!.identifier!
+                var list = (dict[key] != nil) ? dict[key]! : [Accessor]()
+                list.append(item)
+                dict[key] = list
+            }
+            
+            var dict2 = Dictionary<String,[Network]>()
+            for item in networks {
+                let key = item.bundleID!
+                var list = (dict2[key] != nil) ? dict2[key]! : [Network]()
+                list.append(item)
+                dict2[key] = list
+            }
+            
+            
+            var result = [PrivateDataForAppModel]()
+            
+            for key in dict.keys.sorted(by: {$0
+                .localizedStandardCompare($1) == ComparisonResult.orderedAscending}) { //默认字符串排序
+                let accessors = dict[key] ?? [Accessor]()
+                let networks = dict2[key] ?? [Network]()
+                let locationNums = accessors.count
+                let netNums = networks.count
+                result.append(PrivateDataForAppModel(accessors: accessors, networks: networks, boundID: key,netWorkNums: netNums,locationNums: locationNums))
+            }
+            DispatchQueue.main.async {
+                complete(result)
+            }
         }
-        
-        
-        var result = [PrivateDataForAppModel]()
-        
-        for key in dict.keys.sorted(by: {$0
-            .localizedStandardCompare($1) == ComparisonResult.orderedAscending}) { //默认字符串排序
-            let accessors = dict[key] ?? [Accessor]()
-            let networks = dict2[key] ?? [Network]()
-            let locationNums = accessors.count
-            let netNums = networks.count
-            result.append(PrivateDataForAppModel(accessors: accessors, networks: networks, boundID: key,netWorkNums: netNums,locationNums: locationNums))
-        }
-        return result
     }
-    
-    
 }

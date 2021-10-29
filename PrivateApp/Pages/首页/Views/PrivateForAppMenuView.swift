@@ -8,22 +8,23 @@
 import SwiftUI
 
 struct PrivateForAppMenuView: View {
+    @EnvironmentObject var manager: UserDataSourceManager
     @Binding var showMeumView: Bool
-    @Binding var waringTimes: String
-    var sortModel: SortModel
+    @State var maxError = ""
     var body: some View {
+        
         List {
             Section(header: Text("类型")) {
-                PrivateForAppMenuViewItem(sortModel: sortModel, selected: sortModel.sortType == .name, title: SortType.name.rawValue)
+                PrivateForAppMenuViewItem(selected: manager.sortType == .name, title: SortType.name.rawValue)
                     .onTapGesture {
-                        sortModel.sortType = .name
+                        manager.sortType = .name
                         withAnimation {
                             showMeumView.toggle()
                         }
                         
                     }
-                PrivateForAppMenuViewItem(sortModel: sortModel, selected: sortModel.sortType == .locatioCount, title: SortType.locatioCount.rawValue).onTapGesture {
-                    sortModel.sortType = .locatioCount
+                PrivateForAppMenuViewItem(selected: manager.sortType == .locatioCount, title: SortType.locatioCount.rawValue).onTapGesture {
+                    manager.sortType = .locatioCount
                     withAnimation {
                         showMeumView.toggle()
                     }
@@ -31,16 +32,16 @@ struct PrivateForAppMenuView: View {
             }
             
             Section(header: Text("排序方式")) {
-                PrivateForAppMenuViewItem(sortModel: sortModel, selected: sortModel.sortByType == .up, title: SortByType.up.rawValue)
+                PrivateForAppMenuViewItem(selected: manager.sortByType == .up, title: SortByType.up.rawValue)
                     .onTapGesture {
-                        sortModel.sortByType = .up
+                        manager.sortByType = .up
                         withAnimation {
                             showMeumView.toggle()
                         }
                         
                     }
-                PrivateForAppMenuViewItem(sortModel: sortModel, selected: sortModel.sortByType == .down, title: SortByType.down.rawValue).onTapGesture {
-                    sortModel.sortByType = .down
+                PrivateForAppMenuViewItem(selected: manager.sortByType == .down, title: SortByType.down.rawValue).onTapGesture {
+                    manager.sortByType = .down
                     withAnimation {
                         showMeumView.toggle()
                     }
@@ -52,11 +53,19 @@ struct PrivateForAppMenuView: View {
                     Text("1分钟内最多调用次数")
                     Spacer()
                     
-                    TextField(waringTimes, text: $waringTimes ,onCommit: {
+                    
+                    TextField("0", text: $maxError,onCommit: {
                         withAnimation {
                             showMeumView.toggle()
                         }
-                    })
+                    }).onReceive(maxError.publisher.reduce("", { t, c in
+                        return t + String(c)
+                    })) { text in
+                        let times = Int(text) ?? 0
+                        if manager.warringTimes != times {
+                            manager.warringTimes = times
+                        }
+                    }
                         .frame(width: 40, alignment: .center)
                         .overlay(
                             RoundedRectangle(cornerRadius: 4, style: .continuous)
@@ -74,7 +83,6 @@ struct PrivateForAppMenuView: View {
 }
 
 struct PrivateForAppMenuViewItem: View {
-    var sortModel: SortModel
     var selected: Bool
     var title: String = ""
     var body: some View {
@@ -88,11 +96,11 @@ struct PrivateForAppMenuViewItem: View {
     }
 }
 
-struct PrivateForAppMenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        PrivateForAppMenuView(showMeumView:.constant(true), waringTimes: .constant("10"), sortModel:SortModel())
-    }
-}
+//struct PrivateForAppMenuView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PrivateForAppMenuView(showMeumView:.constant(true), waringTimes: .constant("10"), sortModel:SortModel())
+//    }
+//}
 
 
 

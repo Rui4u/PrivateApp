@@ -48,7 +48,7 @@ struct PrivateForAppDetailPage: View {
 struct PrivateForAppDetailPage_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            PrivateForAppPage().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
+            PrivateForAppPage().previewInterfaceOrientation(.portrait)
         } else {
             // Fallback on earlier versions
         }

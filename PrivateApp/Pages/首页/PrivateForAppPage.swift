@@ -8,20 +8,16 @@
 import SwiftUI
 
 struct PrivateForAppPage: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    let dataSource : [PrivateDataForAppModel] = UserDataSourceManager.shared.allDataSourceForApp()
-
-    @State private var showMeumView = false
-    @ObservedObject var sortModel = UserPreferencesManager.shared.sortModel
-    @State var warringTimes = UserPreferencesManager.shared.warringTimes
+//    @Environment(\.managedObjectContext) private var viewContext
     
-    var body: some View {
+    @EnvironmentObject var manager: UserDataSourceManager // environment object
+    @State private var showMeumView = false
         
+    var body: some View {
         NavigationView() {
+
             ZStack (alignment: .leading){
-                PrivateForAppList(sortModel: sortModel,
-                                  warringTimes: $warringTimes,
-                                  dataSource: dataSource)
+                PrivateForAppList().environmentObject(manager)
                     .disabled(showMeumView)
                     .navigationBarTitle("Navigation", displayMode: .inline)
                     .toolbar {
@@ -38,10 +34,10 @@ struct PrivateForAppPage: View {
                 GeometryReader { reader in
                     let width = reader.size.width
                     let height = reader.size.height
-                    PrivateForAppMenuView(showMeumView: $showMeumView,waringTimes: $warringTimes, sortModel: sortModel)
+                    PrivateForAppMenuView(showMeumView: $showMeumView).environmentObject(manager)
                         .frame(width: 300, height: height)
                         .position(x: showMeumView ? width - 150 : width + 300, y: height / 2)
-                    
+
                         .opacity(showMeumView ? 1 : 0)
                 }
             }
@@ -53,7 +49,7 @@ struct PrivateForAppPage: View {
 struct PrivateForAppPage_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            PrivateForAppPage().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portrait)
+            PrivateForAppPage().previewInterfaceOrientation(.portrait)
         } else {
             // Fallback on earlier versions
         }

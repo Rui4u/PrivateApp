@@ -6,18 +6,19 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct IconImage: View {
-    @State private var uiImage: UIImage? = nil
     let placeholderImage = UIImage(systemName: "square.dashed")!
-    
     var imageUrl: String? = ""
     var body: some View {
         ZStack {
-            if self.uiImage != nil {
-                Image(uiImage: self.uiImage!)
-                    .resizable()
-                    .cornerRadius(8)
+            if let url = URL(string: imageUrl ?? "") {
+                HStack{
+                    KFImage(url)
+                        .resizable()
+                        .cornerRadius(8)
+                }
             } else {
                 Image(systemName: "square.dashed")
                     .resizable()
@@ -27,21 +28,6 @@ struct IconImage: View {
         
         .frame(width: 40, height: 40)
         .cornerRadius(4)
-        .onAppear {
-            fetchRemoteImage(url: imageUrl)
-        }
-    }
-    
-    func fetchRemoteImage(url:String?) //用来下载互联网上的图片
-    {
-        guard let url = URL(string: url ?? "") else {return } //初始化一个字符串常量，作为网络图片的地址
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data, let image = UIImage(data: data) {
-                self.uiImage = image
-            }else {
-                print("error: \(String(describing: error))")
-            }
-        }.resume()
     }
 }
 

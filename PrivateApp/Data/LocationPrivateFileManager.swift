@@ -7,14 +7,16 @@
 
 import Foundation
 import SwiftUI
+import HandyJSON
+
 
 struct LocationPrivateFileManager {
     
     static func saveAppInfo(appInfoList :[AppInfo]) {
         
-        var array = [Dictionary<String,String>]()
+        var array = [String]()
         for item in appInfoList {
-            array.append(item.tranformToDict())
+            array.append(item.toJSONString() ?? "")
         }
         
         let data = try? NSKeyedArchiver.archivedData(withRootObject: array, requiringSecureCoding: false)
@@ -25,15 +27,22 @@ struct LocationPrivateFileManager {
     static func find(key: String = "appInfo")-> [AppInfo] {
         //获取documenth路径
         if let result  = UserDefaults.standard.object(forKey: key) as? Data {
-            let a = NSKeyedUnarchiver.unarchiveObject(with: result) as? [Dictionary<String, String>]
+            let a = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSString.self, from: result)
             var array = [AppInfo]()
             for item in a ?? [] {
-                array.append(AppInfo.DictToModel(dict: item))
+                if let app = AppInfo.deserialize(from: item as String) {
+                    array.append(app)
+                }
             }
             return array
         }
         return []
+    
+
+     
     }
+    
+    
     
     
        

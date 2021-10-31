@@ -10,7 +10,7 @@ import SwiftUI
 struct PrivateForAppMenuView: View {
     @EnvironmentObject var manager: UserDataSourceManager
     @Binding var showMeumView: Bool
-    @State var maxError = ""
+    @State var maxError = "10"
     var body: some View {
         
         List {

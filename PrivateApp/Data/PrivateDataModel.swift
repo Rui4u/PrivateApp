@@ -8,24 +8,20 @@
 import UIKit
 import Foundation
 import SwiftUI
+import HandyJSON
 
-struct AppInfo :Hashable{
+
+struct BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
+}
+
+struct AppInfo :HandyJSON, Hashable{
     var name: String?
-    var logoUrl: String
-    var boundId: String
+    var logoUrl: String?
+    var boundId: String?
     var isRequested: Bool = false
-    func tranformToDict()-> Dictionary<String, String> {
-        var dict = Dictionary<String, String>()
-        dict["name"] = name
-        dict["logoUrl"] = logoUrl
-        dict["boundId"] = boundId
-        dict["isRequested"] = String(isRequested)
-        return dict
-    }
-    
-    static func DictToModel(dict: Dictionary<String, String>)-> AppInfo {
-        return AppInfo(name: dict["name"], logoUrl: dict["logoUrl"] ?? "", boundId: dict["boundId"] ?? "", isRequested: Bool(dict["isRequested"] ?? "") ?? true)
-    }
 }
 
 struct Accessor: Decodable, Encodable, Hashable {

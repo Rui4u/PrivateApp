@@ -4,4 +4,8 @@ use_modular_headers!
 
 target 'PrivateApp' do
     pod 'Charts'
+    pod 'Kingfisher', '~> 7.0'
+    pod 'Moya', '~> 15.0'
+    pod 'HandyJSON', '~> 5.0.2'
 end
+

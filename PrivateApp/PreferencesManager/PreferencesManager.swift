@@ -42,6 +42,7 @@ class PreferencesManager: ObservableObject {
     /// 记录所有appids
     var appBoundIds = Set<String>()
   
+    var allBinddingPath = false
     @Published var path: String = "" {
         didSet {
             if let url = URL(string: path) {

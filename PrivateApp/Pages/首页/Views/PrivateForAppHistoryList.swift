@@ -14,12 +14,21 @@ struct PrivateForAppHistoryList: View {
         List {
             Text("历史记录")
             ForEach (searchList, id: \.self) { item in
-                VStack {
+                HStack {
                     Text(item.name)
                         .font(.system(size: 14))
+                    if PreferencesManager.shared.path == item.path {
+                        Spacer()
+                        Image(systemName: "tag.fill")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                            .foregroundColor(.blue)
+                    }
                 }.onTapGesture {
                     PreferencesManager.shared.path = item.path
-                    showMeumView.toggle()
+                    withAnimation {
+                        showMeumView.toggle()
+                    }
                 }
             }
         }

@@ -10,32 +10,42 @@ import Combine
 struct PrivateForAppList: View {
     @EnvironmentObject var manager: PreferencesManager
     @State var searchTitle =  ""
+
+    @State var isLoading = false
     var body: some View {
-        VStack {
-            SearchBar(title: $searchTitle)
-                .onReceive(searchTitle.publisher.reduce("", { t, c in
-                    return t + String(c)
-                })) { text in
-                    if manager.filterByName != text {
-                        manager.filterByName = text
+        ZStack {
+            VStack {
+                SearchBar(title: $searchTitle)
+                    .onReceive(searchTitle.publisher.reduce("", { t, c in
+                        return t + String(c)
+                    })) { text in
+                        if manager.filterByName != text {
+                            manager.filterByName = text
+                        }
+                    }
+                List() {
+                    ForEach(filterList(),id:\.self) { item in
+                        NavigationLink(destination:
+                                        PrivateForAppDetailPage(detailData: item,
+                                                                warringTimes:manager.warringTimes)
+                        ) {
+                            PrivateForAppPageListItem(item: item)
+                        }
                     }
                 }
-            
-            List() {
-                ForEach(filterList(),id:\.self) { item in
-                    NavigationLink(destination:
-                                    PrivateForAppDetailPage(detailData: item,
-                                                            warringTimes:manager.warringTimes)
-                    ) {
-                        PrivateForAppPageListItem(item: item)
-                    }
+                .refreshable {
+                    hideKeyboard()
                 }
             }
-            .refreshable {
-                self.reloadList(path: manager.path)
-                hideKeyboard()
+            
+            if isLoading {
+                LoadingView()
             }
         }.onAppear {
+            if self.manager.allBinddingPath == true {
+                return;
+            }
+            self.manager.allBinddingPath = true;
             let sink = Subscribers.Sink<String, Never>(receiveCompletion: { item in
             }, receiveValue: {item in
                 reloadList(path: item)
@@ -45,8 +55,14 @@ struct PrivateForAppList: View {
     }
     
     func reloadList(path : String) {
+       
+        self.isLoading = true;
         PreferencesManager.shared.allDataSourceForApp(path:path ) { result in
+            self.isLoading =  false;
             manager.appListDataSource = result
+            for item in result {
+                Request().loadData(bundleID: item.boundID)
+            }
         }
     }
     

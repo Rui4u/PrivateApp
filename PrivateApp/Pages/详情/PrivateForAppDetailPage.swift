@@ -37,9 +37,6 @@ struct PrivateForAppDetailPage: View {
         }
         .navigationTitle(PreferencesManager.appName(boundId: detailData.boundID))
         .listStyle(GroupedListStyle())
-        .onAppear {
-            Request().loadData(boundId: detailData.boundID)
-        }
     }
     
     

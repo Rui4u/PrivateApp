@@ -15,7 +15,7 @@ struct PrivateForAppPage: View {
     @State private var showHistoryView = false
     @State private var showHelp = false;
     var body: some View {
-        if (manager.path.count == 0 && false) {
+        if (manager.path.count == 0) {
             Help(showHelp: $showHelp)
         } else {
             NavigationView() {

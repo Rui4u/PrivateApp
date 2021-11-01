@@ -90,10 +90,11 @@ struct LocationPrivateFileManager {
     
        
     // MARK: - 初始化数据
-    static func initializeData(path url: URL, complete: @escaping ([Accessor], [Network])->()) -> Void {
+    static func initializeData(path url: URL, complete: @escaping ([Accessor], [Network], [Any] )->()) -> Void {
         DispatchQueue.global().async {
             var accessors : [Accessor] = [Accessor]()
             var networks : [Network] = [Network]()
+            var orginList : [Any] = [Any]()
 
             guard let path = url as URL? else { return }
             guard let iter = try? LineIterator(url: path) else {return}
@@ -106,9 +107,11 @@ struct LocationPrivateFileManager {
                     if jsonObject["domain"] != nil {
                         if let product = try? JSONDecoder().decode(Network.self, from: jsonData) {
                             networks.append(product)
+                            orginList.append(product)
                         }
-                    }else if let product = try? JSONDecoder().decode(Accessor.self, from: jsonData) {
+                    } else if let product = try? JSONDecoder().decode(Accessor.self, from: jsonData) {
 
+                        orginList.append(product)
                         var ischange = false;
                         accessors = accessors.map { item in
                             var item = item
@@ -124,7 +127,7 @@ struct LocationPrivateFileManager {
                     }
                 }
             }
-            complete(accessors, networks)
+            complete(accessors, networks,orginList)
         }
     }
 

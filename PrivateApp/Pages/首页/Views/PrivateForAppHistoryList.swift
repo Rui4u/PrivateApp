@@ -15,15 +15,14 @@ struct PrivateForAppHistoryList: View {
             Text("历史记录")
             ForEach (searchList, id: \.self) { item in
                 HStack {
+                    Image(systemName: PreferencesManager.shared.path == item.path ? "tag.fill" :"")
+                        .resizable()
+                        .frame(width: 12, height: 12)
+                        .foregroundColor(.blue)
+                    Spacer()
                     Text(item.name)
-                        .font(.system(size: 14))
-                    if PreferencesManager.shared.path == item.path {
-                        Spacer()
-                        Image(systemName: "tag.fill")
-                            .resizable()
-                            .frame(width: 12, height: 12)
-                            .foregroundColor(.blue)
-                    }
+                        .font(.system(size: 12))
+                        .lineLimit(2)
                 }.onTapGesture {
                     PreferencesManager.shared.path = item.path
                     withAnimation {

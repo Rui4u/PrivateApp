@@ -75,12 +75,23 @@ struct PrivateForAppList: View {
                 return item.boundID.contains(manager.filterByName)
             }
         }).sorted { (item1, item2) in
+            
             if manager.sortType == .name {
-                let a = item1
-                    .boundID.localizedStandardCompare(item2.boundID) == ComparisonResult.orderedAscending
-                return a
+                if manager.sortByType == .up {
+                    let a = item1
+                        .boundID.localizedStandardCompare(item2.boundID) == ComparisonResult.orderedAscending
+                    return a
+                } else {
+                    let a = item1
+                        .boundID.localizedStandardCompare(item2.boundID) == ComparisonResult.orderedDescending
+                    return a
+                }
             } else if manager.sortType == .locatioCount {
-                return item1.locationNums > item2.locationNums
+                if manager.sortByType == .up {
+                    return item1.locationNums > item2.locationNums
+                }else {
+                    return item1.locationNums < item2.locationNums
+                }
             }
             return true
         }
@@ -102,13 +113,13 @@ struct PrivateForAppPageListItem: View {
             }
             Spacer()
             VStack {
-                RightItem(imageString:  "network",
-                          imageColor: .blue,
-                          title: "\(item.netWorkNums)");
-                Spacer()
                 RightItem(imageString:"hand.raised.slash",
                           imageColor: .red,
                           title: "\(item.locationNums)");
+                Spacer()
+                RightItem(imageString:  "network",
+                          imageColor: .blue,
+                          title: "\(item.netWorkNums)");
             }
         }
     }

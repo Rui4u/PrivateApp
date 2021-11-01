@@ -43,6 +43,16 @@ class PreferencesManager: ObservableObject {
     var appBoundIds = Set<String>()
   
     var allBinddingPath = false
+    /// 原始数组
+    var ogrinList = [Any]()
+    
+    @Published var appListDataSource: [PrivateDataForAppModel] = []
+    @Published var sortType : SortType = .name
+    @Published var sortByType : SortByType = .up
+    
+    @Published var filterByName : String = ""
+    @Published var warringTimes: Int = 10
+    
     @Published var path: String = "" {
         didSet {
             if let url = URL(string: path) {
@@ -50,12 +60,6 @@ class PreferencesManager: ObservableObject {
             }
         }
     }
-    @Published var appListDataSource: [PrivateDataForAppModel] = []
-    @Published var sortType : SortType = .name
-    @Published var sortByType : SortByType = .up
-    
-    @Published var filterByName : String = ""
-    @Published var warringTimes: Int = 10
     
     /// 获取app信息
     static func appInfo(bundleId: String)-> AppInfo? {
@@ -148,7 +152,11 @@ class PreferencesManager: ObservableObject {
         }
 
         
-        LocationPrivateFileManager.initializeData(path: path) { accessors, networks in
+        LocationPrivateFileManager.initializeData(path: path) { accessors, networks, orginList in
+            self.ogrinList = orginList
+            self.accessors = accessors
+            self.networks = networks
+            
             var dict = Dictionary<String,[Accessor]>()
             for item in accessors {
                 let key = item.accessor!.identifier!

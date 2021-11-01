@@ -24,6 +24,7 @@ struct LocationPrivateFileManager {
         UserDefaults.standard.set(data, forKey: "appInfo")
     }
     
+    
     static func find(key: String = "appInfo")-> [AppInfo] {
         //获取documenth路径
         if let result  = UserDefaults.standard.object(forKey: key) as? Data {
@@ -37,9 +38,6 @@ struct LocationPrivateFileManager {
             return array
         }
         return []
-    
-
-     
     }
     
     struct LocationFileData: Identifiable , Hashable{
@@ -87,9 +85,7 @@ struct LocationPrivateFileManager {
         guard let data = NSData(contentsOf: url) else {
             return
         }
-        
-        let _ = try? data.write(toFile: filePath, atomically: true)
-        
+        let _ = data.write(toFile: filePath, atomically: true)
     }
     
        

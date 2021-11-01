@@ -13,7 +13,7 @@ struct PrivateForAppDetailPage: View {
     var body: some View {
         List{
             
-            let result = UserDataSourceManager.findChartsData(dataSource: detailData.accessors, onlyLastDay: true)
+            let result = PreferencesManager.findChartsData(dataSource: detailData.accessors, onlyLastDay: true)
             CharsView(dataSource: result,
                       waringTimes: warringTimes)
             
@@ -35,7 +35,7 @@ struct PrivateForAppDetailPage: View {
                 }
             }
         }
-        .navigationTitle(UserDataSourceManager.appName(boundId: detailData.boundID))
+        .navigationTitle(PreferencesManager.appName(boundId: detailData.boundID))
         .listStyle(GroupedListStyle())
         .onAppear {
             Request().loadData(boundId: detailData.boundID)

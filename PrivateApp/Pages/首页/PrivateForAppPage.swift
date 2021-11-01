@@ -10,7 +10,7 @@ import SwiftUI
 struct PrivateForAppPage: View {
     //    @Environment(\.managedObjectContext) private var viewContext
     
-    @EnvironmentObject var manager: UserDataSourceManager // environment object
+    @EnvironmentObject var manager: PreferencesManager // environment object
     @State private var showMeumView = false
     @State private var showHistoryView = false
     @State private var showHelp = false;
@@ -72,7 +72,7 @@ struct PrivateForAppPage: View {
 struct PrivateForAppPage_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            PrivateForAppPage().environmentObject(UserDataSourceManager.shared).previewInterfaceOrientation(.portrait)
+            PrivateForAppPage().environmentObject(PreferencesManager.shared).previewInterfaceOrientation(.portrait)
         } else {
             // Fallback on earlier versions
         }

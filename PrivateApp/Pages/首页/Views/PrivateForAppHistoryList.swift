@@ -18,7 +18,7 @@ struct PrivateForAppHistoryList: View {
                     Text(item.name)
                         .font(.system(size: 14))
                 }.onTapGesture {
-                    UserDataSourceManager.shared.path = item.path
+                    PreferencesManager.shared.path = item.path
                     showMeumView.toggle()
                 }
             }

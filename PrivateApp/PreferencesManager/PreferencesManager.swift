@@ -24,10 +24,10 @@ class SortModel: ObservableObject {
     }
 }
 
-class UserDataSourceManager: ObservableObject {
+class PreferencesManager: ObservableObject {
     
-    static let shared: UserDataSourceManager = {
-        var manager = UserDataSourceManager()
+    static let shared: PreferencesManager = {
+        var manager = PreferencesManager()
         if let path = LocationPrivateFileManager.findFile().last?.path {
             manager.path = path
         }
@@ -42,7 +42,13 @@ class UserDataSourceManager: ObservableObject {
     /// 记录所有appids
     var appBoundIds = Set<String>()
   
-    @Published var path: String = ""
+    @Published var path: String = "" {
+        didSet {
+            if let url = URL(string: path) {
+                LocationPrivateFileManager.saveFile(url: url)
+            }
+        }
+    }
     @Published var appListDataSource: [PrivateDataForAppModel] = []
     @Published var sortType : SortType = .name
     @Published var sortByType : SortByType = .up
@@ -52,7 +58,7 @@ class UserDataSourceManager: ObservableObject {
     
     /// 获取app信息
     static func appInfo(bundleId: String)-> AppInfo? {
-       return UserDataSourceManager.shared.appInfos.filter{$0.bundleId == bundleId}.first
+       return PreferencesManager.shared.appInfos.filter{$0.bundleId == bundleId}.first
     }
     
     /// 获取appName
@@ -109,7 +115,7 @@ class UserDataSourceManager: ObservableObject {
                 returnList = [CharsViewDataItem]()
             }
             
-            UserDataSourceManager.shared.appBoundIds.insert(item.accessor?.identifier ?? "")
+            PreferencesManager.shared.appBoundIds.insert(item.accessor?.identifier ?? "")
             
             let key =  PrivateDataModelTools.stringConvertDate(string: item.timeStamp!, resultFormart: "HH:mm")
             let currentInterval = PrivateDataModelTools.stringConvertTimeInterval(time1String: item.timeStamp!, time2String:firstTimeStamp)

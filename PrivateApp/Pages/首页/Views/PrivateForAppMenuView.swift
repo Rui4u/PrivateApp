@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PrivateForAppMenuView: View {
-    @EnvironmentObject var manager: UserDataSourceManager
+    @EnvironmentObject var manager: PreferencesManager
     @Binding var showMeumView: Bool
     @State var maxError = "10"
     var body: some View {

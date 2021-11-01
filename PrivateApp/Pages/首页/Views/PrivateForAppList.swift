@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 struct PrivateForAppList: View {
-    @EnvironmentObject var manager: UserDataSourceManager
+    @EnvironmentObject var manager: PreferencesManager
     @State var searchTitle =  ""
     var body: some View {
         VStack {
@@ -40,12 +40,12 @@ struct PrivateForAppList: View {
             }, receiveValue: {item in
                 reloadList(path: item)
             })
-            UserDataSourceManager.shared.$path.subscribe(sink)
+            PreferencesManager.shared.$path.subscribe(sink)
         }
     }
     
     func reloadList(path : String) {
-        UserDataSourceManager.shared.allDataSourceForApp(path:path ) { result in
+        PreferencesManager.shared.allDataSourceForApp(path:path ) { result in
             manager.appListDataSource = result
         }
     }
@@ -77,10 +77,10 @@ struct PrivateForAppPageListItem: View {
     var body: some View {
         HStack {
             HStack {
-                let url = UserDataSourceManager.appIconUrl(boundId: item.boundID)
+                let url = PreferencesManager.appIconUrl(boundId: item.boundID)
                 IconImage(imageUrl: url)
                 VStack {
-                    Text(UserDataSourceManager.appInfo(bundleId: item.boundID)?.appName ?? item.boundID)
+                    Text(PreferencesManager.appInfo(bundleId: item.boundID)?.appName ?? item.boundID)
                         .lineLimit(1)
                 }
             }

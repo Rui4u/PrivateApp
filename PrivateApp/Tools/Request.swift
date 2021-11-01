@@ -68,8 +68,8 @@ class Request {
                     let result = results?.first                    
                     if var appInfo = AppInfo.deserialize(from: result) {
                         appInfo.isRequested = boundId.count > 0
-                        UserDataSourceManager.shared.appInfos.append(appInfo)
-                        LocationPrivateFileManager.saveAppInfo(appInfoList: UserDataSourceManager.shared.appInfos)
+                        PreferencesManager.shared.appInfos.append(appInfo)
+                        LocationPrivateFileManager.saveAppInfo(appInfoList: PreferencesManager.shared.appInfos)
                     }
                 }
                 

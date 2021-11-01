@@ -8,9 +8,9 @@
 import SwiftUI
 
 @main
-struct PrivateAppApp: App {
+struct PrivateApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject var appDataSourceManager = UserDataSourceManager.shared
+    @StateObject var appDataSourceManager = PreferencesManager.shared
     var body: some Scene {
         WindowGroup {
             PrivateForAppPage().environmentObject(appDataSourceManager)

@@ -12,14 +12,10 @@ import Combine
 class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject { // 👈🏻
   
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-//        let path = Bundle.main.url(forResource: "App_Privacy_Report_v4_2021-10-28T17_21_59(1)", withExtension: "ndjson")!
         guard let url = URLContexts.first?.url.absoluteString else {
             return
         }
-        UserDataSourceManager.shared.path = url
-            
-        LocationPrivateFileManager.saveFile(url: URL(string: url)!)
-        LocationPrivateFileManager.findFile()
+        PreferencesManager.shared.path = url
     }
 }
 

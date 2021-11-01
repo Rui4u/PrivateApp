@@ -54,7 +54,7 @@ struct ListHeaderIcon: View {
             GeometryReader { reader in
                 let width = reader.size.width
                 let height = reader.size.height
-                let urlString = UserDataSourceManager.appIconUrl(accessor: accessor)
+                let urlString = PreferencesManager.appIconUrl(accessor: accessor)
                 IconImage(imageUrl:urlString)
                     .frame(width: width, height: height)
                     .position(x: width / 2, y: height / 2)

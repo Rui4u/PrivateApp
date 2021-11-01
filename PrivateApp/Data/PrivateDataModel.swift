@@ -10,18 +10,55 @@ import Foundation
 import SwiftUI
 import HandyJSON
 
-
-struct BasicTypes: HandyJSON {
-    var int: Int = 2
-    var doubleOptional: Double?
-    var stringImplicitlyUnwrapped: String!
-}
-
-struct AppInfo :HandyJSON, Hashable{
-    var name: String?
-    var logoUrl: String?
-    var boundId: String?
+struct AppInfo: HandyJSON ,Hashable {
+    var screenshotUrls: Array<String>?
+    var ipadScreenshotUrls: Array<String>?
+    var appletvScreenshotUrls: Array<String>?
+    var artworkUrl60: String?
+    var artworkUrl512: String?
+    var artworkUrl100: String?
+    var artistViewUrl: String?
+    var features: Array<String>?
+    var supportedDevices: Array<String>?
+    var advisories: Array<String>?
+    var isGameCenterEnabled: Bool = false
+    var kind: String?
+    var averageUserRatingForCurrentVersion: Float = 0
+    var userRatingCountForCurrentVersion: Int = 0
+    var averageUserRating: Float = 0
+    var trackViewUrl: String?
+    var trackContentRating: String?
+    var minimumOsVersion: String?
+    var trackCensoredName: String?
+    var languageCodesISO2A: Array<String>?
+    var currency: String?
+    var bundleId: String?
+    var trackId: Int = 0
+    var trackName: String?
+    var releaseDate: String?
+    var sellerName: String?
+    var primaryGenreName: String?
+    var genreIds: Array<String>?
+    var formattedPrice: String?
+    var isVppDeviceBasedLicensingEnabled: Bool = false
+    var currentVersionReleaseDate: String?
+    var releaseNotes: String?
+    var primaryGenreId: Int = 0
+    var description: String?
+    var artistId: Int = 0
+    var artistName: String?
+    var genres: Array<String>?
+    var price: Float = 0
+    var version: String?
+    var wrapperType: String?
+    var userRatingCount: Int = 0
+    
+    
+    
     var isRequested: Bool = false
+    var appName: String? {
+        trackName?.components(separatedBy: " ").first?.components(separatedBy: "-").first
+    }
 }
 
 struct Accessor: Decodable, Encodable, Hashable {

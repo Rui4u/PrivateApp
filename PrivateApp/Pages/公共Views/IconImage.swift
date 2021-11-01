@@ -25,7 +25,6 @@ struct IconImage: View {
                     .foregroundColor(Color.blue)
             }
         }
-        
         .frame(width: 40, height: 40)
         .cornerRadius(4)
     }

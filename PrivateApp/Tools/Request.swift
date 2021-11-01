@@ -19,14 +19,14 @@ extension ItunesTarget : TargetType {
     
     var path: String {
         switch self {
-        case .lookup(let bundleId):
+        case .lookup(_):
             return "lookup"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .lookup(let id):
+        case .lookup(_):
             return  .get
         }
     }
@@ -37,6 +37,7 @@ extension ItunesTarget : TargetType {
 
         case .lookup(let bundleId):
             parmeters = ["bundleId":bundleId] as [String : Any]
+            parmeters["country"] = "cn"
             return .requestParameters(parameters: parmeters, encoding: URLEncoding.default)
         }
     }
@@ -59,20 +60,17 @@ class Request {
         let NetworkProvider = MoyaProvider<ItunesTarget>()
 
         NetworkProvider.request(ItunesTarget.lookup(bundleId: boundId)) { result in
-            
             if case .success(let response) = result {
                 // 解析数据
                 if let dic = try? response.mapJSON() as? NSDictionary {
                     print(dic)
                     let results = dic["results"] as? Array<Dictionary<String, Any>>
-                    let result = results?.first
-                    let iconUrl = result?["artworkUrl100"] as? String ?? ""
-                    let name = result?["trackName"] as? String
-
-                    var appInfo = AppInfo(name: name, logoUrl: iconUrl, boundId: boundId)
-                    appInfo.isRequested = boundId.count > 0
-                    UserDataSourceManager.shared.appInfos.append(appInfo)
-                    LocationPrivateFileManager.saveAppInfo(appInfoList: UserDataSourceManager.shared.appInfos)
+                    let result = results?.first                    
+                    if var appInfo = AppInfo.deserialize(from: result) {
+                        appInfo.isRequested = boundId.count > 0
+                        UserDataSourceManager.shared.appInfos.append(appInfo)
+                        LocationPrivateFileManager.saveAppInfo(appInfoList: UserDataSourceManager.shared.appInfos)
+                    }
                 }
                 
             }

@@ -45,19 +45,19 @@ class UserDataSourceManager: ObservableObject {
     @Published var warringTimes: Int = 10
     
     /// 获取app信息
-    static func appInfo(boundId: String)-> AppInfo? {
-       return UserDataSourceManager.shared.appInfos.filter{$0.boundId == boundId}.first
+    static func appInfo(bundleId: String)-> AppInfo? {
+       return UserDataSourceManager.shared.appInfos.filter{$0.bundleId == bundleId}.first
     }
     
     /// 获取appName
     static func appName(boundId: String? = nil, accessor: Accessor? = nil)-> String {
-        guard let boundId = boundId else {
-            guard let accessor = accessor else {
-                return ""
-            }
-            return self.appInfo(boundId: accessor.accessor!.identifier ?? "")?.name ?? ""
+        
+        if let boundId = boundId {
+            return self.appInfo(bundleId: boundId)?.appName ?? boundId
+        } else if let accessor = accessor {
+           return self.appInfo(bundleId: accessor.accessor!.identifier ?? "")?.appName ?? ""
         }
-        return self.appInfo(boundId: boundId)?.name ?? boundId
+        return ""
     }
     
     /// 获取appIconUrl
@@ -66,9 +66,9 @@ class UserDataSourceManager: ObservableObject {
             guard let accessor = accessor else {
                 return ""
             }
-            return self.appInfo(boundId: accessor.accessor!.identifier ?? "")?.logoUrl ?? ""
+            return self.appInfo(bundleId: accessor.accessor!.identifier ?? "")?.artworkUrl100 ?? ""
         }
-        return self.appInfo(boundId: boundId)?.logoUrl ?? ""
+        return self.appInfo(bundleId: boundId)?.artworkUrl100 ?? ""
     }
     
     /// 获取图标信息

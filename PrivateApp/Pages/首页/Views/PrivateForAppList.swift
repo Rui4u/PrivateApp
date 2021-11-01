@@ -81,7 +81,7 @@ struct PrivateForAppPageListItem: View {
                 let url = UserDataSourceManager.appIconUrl(boundId: item.boundID)
                 IconImage(imageUrl: url)
                 VStack {
-                    Text(UserDataSourceManager.appInfo(boundId: item.boundID)?.name ?? item.boundID)
+                    Text(UserDataSourceManager.appInfo(bundleId: item.boundID)?.appName ?? item.boundID)
                         .lineLimit(1)
                 }
             }

@@ -54,7 +54,7 @@ struct AppInfo: HandyJSON ,Hashable {
     var userRatingCount: Int = 0
     
     
-    
+    // 自定义 负责记录
     var isRequested: Bool = false
     var appName: String? {
         trackName?.components(separatedBy: " ").first?.components(separatedBy: "-").first

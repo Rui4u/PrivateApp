@@ -11,6 +11,7 @@
 		5528FD6027297258008AB594 /* PrivateForAppList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528FD5F27297258008AB594 /* PrivateForAppList.swift */; };
 		5528FD6227297310008AB594 /* PrivateForAppMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528FD6127297310008AB594 /* PrivateForAppMenuView.swift */; };
 		5528FD68272975A8008AB594 /* ListHeaderIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528FD67272975A8008AB594 /* ListHeaderIcon.swift */; };
+		55308A42272FD6D900EDEF0B /* PrivateForAppHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55308A41272FD6D900EDEF0B /* PrivateForAppHistoryList.swift */; };
 		554937562720FD26008EDC89 /* CharsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554937552720FD26008EDC89 /* CharsView.swift */; };
 		5568EF69272A4F5D00E0974D /* TestDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568EF68272A4F5D00E0974D /* TestDataManager.swift */; };
 		55879020272AA36400A7DF49 /* App_Privacy_Report_v4_2021-10-28T17_21_59.ndjson in Resources */ = {isa = PBXBuildFile; fileRef = 5587901F272AA36400A7DF49 /* App_Privacy_Report_v4_2021-10-28T17_21_59.ndjson */; };
@@ -31,6 +32,7 @@
 		55AAEA962726D04A00B721E6 /* LocationPrivateFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AAEA952726D04A00B721E6 /* LocationPrivateFileManager.swift */; };
 		55AAEA9F2727EC6800B721E6 /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AAEA9E2727EC6800B721E6 /* IconImage.swift */; };
 		55AAEAA12727F0E800B721E6 /* UserPreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AAEAA02727F0E800B721E6 /* UserPreferencesManager.swift */; };
+		55E24E6B272F997F00F3AC1B /* Help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E24E6A272F997F00F3AC1B /* Help.swift */; };
 		55ED264D272A408500EB3C27 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED264C272A408500EB3C27 /* SearchBar.swift */; };
 		59B1DDCB32818E3B687C9201 /* libPods-PrivateApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD8E3EB032475370097C19E1 /* libPods-PrivateApp.a */; };
 /* End PBXBuildFile section */
@@ -57,6 +59,7 @@
 		5528FD5F27297258008AB594 /* PrivateForAppList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateForAppList.swift; sourceTree = "<group>"; };
 		5528FD6127297310008AB594 /* PrivateForAppMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateForAppMenuView.swift; sourceTree = "<group>"; };
 		5528FD67272975A8008AB594 /* ListHeaderIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeaderIcon.swift; sourceTree = "<group>"; };
+		55308A41272FD6D900EDEF0B /* PrivateForAppHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateForAppHistoryList.swift; sourceTree = "<group>"; };
 		554937552720FD26008EDC89 /* CharsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharsView.swift; sourceTree = "<group>"; };
 		5568EF68272A4F5D00E0974D /* TestDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataManager.swift; sourceTree = "<group>"; };
 		5587901F272AA36400A7DF49 /* App_Privacy_Report_v4_2021-10-28T17_21_59.ndjson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "App_Privacy_Report_v4_2021-10-28T17_21_59.ndjson"; sourceTree = "<group>"; };
@@ -80,6 +83,7 @@
 		55AAEA952726D04A00B721E6 /* LocationPrivateFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPrivateFileManager.swift; sourceTree = "<group>"; };
 		55AAEA9E2727EC6800B721E6 /* IconImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
 		55AAEAA02727F0E800B721E6 /* UserPreferencesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesManager.swift; sourceTree = "<group>"; };
+		55E24E6A272F997F00F3AC1B /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
 		55ED264C272A408500EB3C27 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		5EE4660733FCFCC2AC900E3C /* Pods-PrivateApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrivateApp.debug.xcconfig"; path = "Target Support Files/Pods-PrivateApp/Pods-PrivateApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6DBC56363ECCBA17DDAAB4AE /* Pods-PrivateApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrivateApp.release.xcconfig"; path = "Target Support Files/Pods-PrivateApp/Pods-PrivateApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 			children = (
 				5528FD5F27297258008AB594 /* PrivateForAppList.swift */,
 				5528FD6127297310008AB594 /* PrivateForAppMenuView.swift */,
+				55308A41272FD6D900EDEF0B /* PrivateForAppHistoryList.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -251,6 +256,7 @@
 		55A5D16D271EE80600BCE39D /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				55E24E69272F996700F3AC1B /* 帮助 */,
 				55AAEAA02727F0E800B721E6 /* UserPreferencesManager.swift */,
 				5528FD652729742F008AB594 /* 隐私列表 */,
 				5528FD632729737C008AB594 /* 详情 */,
@@ -258,6 +264,14 @@
 				554937542720FD18008EDC89 /* 公共Views */,
 			);
 			path = Pages;
+			sourceTree = "<group>";
+		};
+		55E24E69272F996700F3AC1B /* 帮助 */ = {
+			isa = PBXGroup;
+			children = (
+				55E24E6A272F997F00F3AC1B /* Help.swift */,
+			);
+			path = "帮助";
 			sourceTree = "<group>";
 		};
 		7A13EC5BB3C7BF443858DB97 /* Pods */ = {
@@ -445,10 +459,12 @@
 				55A5D177271FC52200BCE39D /* PrivateForAppDetailPage.swift in Sources */,
 				55A5D175271FBE1E00BCE39D /* PrivateForAppPage.swift in Sources */,
 				5528FD6027297258008AB594 /* PrivateForAppList.swift in Sources */,
+				55E24E6B272F997F00F3AC1B /* Help.swift in Sources */,
 				55AAEA962726D04A00B721E6 /* LocationPrivateFileManager.swift in Sources */,
 				55A5D170271EE80F00BCE39D /* PrivateDataModel.swift in Sources */,
 				5528FD68272975A8008AB594 /* ListHeaderIcon.swift in Sources */,
 				55A5D13E271EE7DB00BCE39D /* PrivateAppApp.swift in Sources */,
+				55308A42272FD6D900EDEF0B /* PrivateForAppHistoryList.swift in Sources */,
 				55A5D14A271EE7DE00BCE39D /* PrivateApp.xcdatamodeld in Sources */,
 				55ED264D272A408500EB3C27 /* SearchBar.swift in Sources */,
 				55AAEA9F2727EC6800B721E6 /* IconImage.swift in Sources */,

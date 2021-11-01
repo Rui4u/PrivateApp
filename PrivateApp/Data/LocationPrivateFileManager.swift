@@ -42,8 +42,55 @@ struct LocationPrivateFileManager {
      
     }
     
+    struct LocationFileData: Identifiable , Hashable{
+        var id: Int {
+            self.name.hashValue + self.path.hashValue
+        }
+        var name: String
+        var path: String
+    }
     
+    static func findFile() -> [LocationFileData]{
+        var resultList = [LocationFileData]()
+        
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last else {
+            return resultList
+        }
+        let songBundle = Bundle(path: path)
+        guard let bundlePath = songBundle?.resourcePath else {
+            return resultList
+        }
+        let array = Bundle.paths(forResourcesOfType: "ndjson", inDirectory: bundlePath)
+        
+        
+        for item in array {
+            if let url = URL(string: item) {
+                resultList.append(LocationFileData(name: url.lastPathComponent, path: url.absoluteString))
+            }
+        }
+        return resultList
+    }
     
+    static func saveFile(url: URL) {
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last else {
+            return
+        }
+        
+        let fileManager = FileManager.default
+        let fileName = "\(url.lastPathComponent)"
+        
+        let filePath = path + "/" + fileName
+        if (!fileManager.fileExists(atPath: filePath)) { //创建
+            try? fileManager.createDirectory(at: URL(string: filePath)!, withIntermediateDirectories: true, attributes: nil)
+        }
+        
+        guard let data = NSData(contentsOf: url) else {
+            return
+        }
+        
+        let _ = try? data.write(toFile: filePath, atomically: true)
+        
+    }
     
        
     // MARK: - 初始化数据

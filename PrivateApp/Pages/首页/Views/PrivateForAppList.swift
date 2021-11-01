@@ -32,7 +32,6 @@ struct PrivateForAppList: View {
                 }
             }
             .refreshable {
-                manager.path =  Bundle.main.path(forResource: "App_Privacy_Report_v4_2021-10-28T17_21_59", ofType: "ndjson")!
                 self.reloadList(path: manager.path)
                 hideKeyboard()
             }

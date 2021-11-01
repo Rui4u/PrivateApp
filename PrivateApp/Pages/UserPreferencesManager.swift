@@ -26,7 +26,13 @@ class SortModel: ObservableObject {
 
 class UserDataSourceManager: ObservableObject {
     
-    static let shared = UserDataSourceManager()
+    static let shared: UserDataSourceManager = {
+        var manager = UserDataSourceManager()
+        if let path = LocationPrivateFileManager.findFile().last?.path {
+            manager.path = path
+        }
+        return manager
+    }()
     /// 隐私数据
     var accessors : [Accessor] = [Accessor]()
     /// 网络数据

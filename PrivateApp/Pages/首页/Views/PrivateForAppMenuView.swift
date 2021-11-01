@@ -76,7 +76,6 @@ struct PrivateForAppMenuView: View {
         }
         .environment(\.defaultMinListHeaderHeight, 0.1) // HERE
         .cornerRadius(4)
-        .listStyle(GroupedListStyle())
         .padding()
         .shadow(color: Color.gray.opacity(0.3), radius: 7, x: 0, y: 0)
     }

@@ -17,8 +17,9 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject { // 👈
             return
         }
         UserDataSourceManager.shared.path = url
-        
-        
+            
+        LocationPrivateFileManager.saveFile(url: URL(string: url)!)
+        LocationPrivateFileManager.findFile()
     }
 }
 

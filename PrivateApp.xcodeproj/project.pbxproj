@@ -15,6 +15,7 @@
 		55308A45272FEFDB00EDEF0B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55308A44272FEFDB00EDEF0B /* LoadingView.swift */; };
 		554937562720FD26008EDC89 /* CharsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554937552720FD26008EDC89 /* CharsView.swift */; };
 		5568EF69272A4F5D00E0974D /* TestDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568EF68272A4F5D00E0974D /* TestDataManager.swift */; };
+		55849CEB2730E49D00FDB14B /* NetRequestDetailListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55849CEA2730E49D00FDB14B /* NetRequestDetailListPage.swift */; };
 		55879051272B88A800A7DF49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55879050272B88A800A7DF49 /* AppDelegate.swift */; };
 		55A5D13E271EE7DB00BCE39D /* PrivateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D13D271EE7DB00BCE39D /* PrivateApp.swift */; };
 		55A5D142271EE7DE00BCE39D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55A5D141271EE7DE00BCE39D /* Assets.xcassets */; };
@@ -62,6 +63,7 @@
 		55308A44272FEFDB00EDEF0B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		554937552720FD26008EDC89 /* CharsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharsView.swift; sourceTree = "<group>"; };
 		5568EF68272A4F5D00E0974D /* TestDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataManager.swift; sourceTree = "<group>"; };
+		55849CEA2730E49D00FDB14B /* NetRequestDetailListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetRequestDetailListPage.swift; sourceTree = "<group>"; };
 		55879050272B88A800A7DF49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55A5D13A271EE7DB00BCE39D /* PrivateApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrivateApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55A5D13D271EE7DB00BCE39D /* PrivateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApp.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 			children = (
 				5528FD662729759B008AB594 /* Views */,
 				55A5D179271FEA2300BCE39D /* PrivateLocationDetailListPage.swift */,
+				55849CEA2730E49D00FDB14B /* NetRequestDetailListPage.swift */,
 			);
 			path = "隐私列表";
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				55AAEA922726C2BB00B721E6 /* Request.swift in Sources */,
 				5528FD6227297310008AB594 /* PrivateForAppMenuView.swift in Sources */,
 				55AAEAA12727F0E800B721E6 /* PreferencesManager.swift in Sources */,
+				55849CEB2730E49D00FDB14B /* NetRequestDetailListPage.swift in Sources */,
 				5568EF69272A4F5D00E0974D /* TestDataManager.swift in Sources */,
 				55A5D17A271FEA2300BCE39D /* PrivateLocationDetailListPage.swift in Sources */,
 				55308A45272FEFDB00EDEF0B /* LoadingView.swift in Sources */,

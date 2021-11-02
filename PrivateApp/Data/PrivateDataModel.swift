@@ -102,9 +102,16 @@ struct PrivateDataForAppModel: Hashable{
     var boundID: String
     var netWorkNums: Int
     var locationNums: Int
+    var appInfo: AppInfo?
 }
 
-
+struct LocationFileData: Identifiable , Hashable{
+    var id: Int {
+        self.name.hashValue + self.path.hashValue
+    }
+    var name: String
+    var path: String
+}
 
 
 

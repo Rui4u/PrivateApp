@@ -98,9 +98,9 @@ struct CartesianChartView: UIViewRepresentable {
         leftAxis.labelPosition = .outsideChart;
         leftAxis.gridColor = UIColor.init(red: 233/255.0, green: 233/255.0, blue: 233/255.0, alpha: 1.0);//网格
         leftAxis.gridAntialiasEnabled = false;//抗锯齿
-        leftAxis.axisMaximum = 20;//最大值
+        leftAxis.axisMaximum = 15;//最大值
         leftAxis.axisMinimum = 0;
-        leftAxis.labelCount = 11;//多少等分
+        leftAxis.labelCount = 10;//多少等分
         
         //x轴
         let xAxis = lineChartView.xAxis;
@@ -128,6 +128,7 @@ struct CartesianChartView: UIViewRepresentable {
             return item
         }.map{$0.key}
         
+        /// 过滤重复
         xValues = xValues.filterDuplicates{$0}
         xValues.sort()
         
@@ -138,6 +139,7 @@ struct CartesianChartView: UIViewRepresentable {
         
         var errorString = [(String, String)]()
         var dataSets = [LineChartDataSet]()
+        
         for key in dataSource.keys {
             let lineDataSource = dataSource[key] ?? [];
             var yDataArray1 = [ChartDataEntry]();
@@ -167,11 +169,27 @@ struct CartesianChartView: UIViewRepresentable {
             let set1 = LineChartDataSet.init(entries: yDataArray1, label: iconInfo.name);
             set1.colors = [UIColor(iconInfo.lineColor)]
             set1.drawCirclesEnabled = false;//绘制转折点
+            set1.mode = .horizontalBezier
             set1.lineCapType = .round
             set1.lineWidth = 1.0;
             dataSets.append(set1)
-            
         }
+        
+        var yDataArray1 = [ChartDataEntry]();
+        for index in 0..<xValues.count {
+            let entry = ChartDataEntry.init(x: Double(index), y: Double(waringTimes));
+            yDataArray1.append(entry);
+        }
+        let set1 = LineChartDataSet.init(entries: yDataArray1, label: "警戒线");
+        set1.mode = .horizontalBezier
+        set1.lineDashLengths = [5.0, 5.0];
+        set1.colors = [UIColor.red]
+        set1.drawCirclesEnabled = false;//绘制转折点
+        set1.lineCapType = .round
+        set1.lineWidth = 1.0;
+        dataSets.append(set1)
+        
+        
                                           
         if errorString.count > 0 {
             DispatchQueue.main.async {

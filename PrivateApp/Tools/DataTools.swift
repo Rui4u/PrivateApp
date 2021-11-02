@@ -86,7 +86,10 @@ struct PrivateDataModelTools {
     }
   
     
-    static func stringConvertDate(string:String, resultFormart:String, dateFormat:String="yyyy-MM-dd'T'HH:mm:ss.SSSxxx") -> String {
+    static func stringConvertDate(string:String?, resultFormart:String, dateFormat:String="yyyy-MM-dd'T'HH:mm:ss.SSSxxx") -> String {
+        guard let string = string else {
+            return ""
+        }
         let formatter = DateFormatter.init()
         formatter.dateFormat = dateFormat
         let date = formatter.date(from: string)

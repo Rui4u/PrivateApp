@@ -46,6 +46,48 @@ struct PrivateLocationDetailListItem: View {
     }
 }
 
+
+struct NetworkDetailListItem: View {
+    var network: Network
+    var body: some View {
+        
+        VStack(alignment: .leading) {
+            HStack{
+                HeaderIcon(bundleID: network.bundleID!)
+                    .frame(width: 40, height: 40)
+                VStack {
+                    HStack {
+                        Text(network.domain ?? "")
+                            .fontWeight(.heavy)
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        let startTime = PrivateDataModelTools.stringConvertDate(string: network.firstTimeStamp, resultFormart: "yyyy-MM-dd HH:mm:ss")
+                        let endTime = PrivateDataModelTools.stringConvertDate(string: network.timeStamp, resultFormart: "HH:mm:ss")
+                        Text(startTime + " - " + endTime).font(.system(size: 12))
+                        Spacer()
+                    }
+                }.lineLimit(1)
+                Spacer()
+                Text("\(network.hits ?? 0)次")
+            }.font(.subheadline)
+        }
+    }
+}
+
+
+
+private struct HeaderIcon: View {
+    var bundleID: String
+    var body: some View {
+        let urlString = PreferencesManager.appIconUrl(boundId: bundleID)
+        IconImage(imageUrl:urlString)
+    }
+
+}
+
+
 struct ListHeaderIcon: View {
     var accessor: Accessor
     var body: some View {
@@ -54,8 +96,7 @@ struct ListHeaderIcon: View {
             GeometryReader { reader in
                 let width = reader.size.width
                 let height = reader.size.height
-                let urlString = PreferencesManager.appIconUrl(accessor: accessor)
-                IconImage(imageUrl:urlString)
+                HeaderIcon(bundleID: accessor.accessor!.identifier!)
                     .frame(width: width, height: height)
                     .position(x: width / 2, y: height / 2)
                 Circle()

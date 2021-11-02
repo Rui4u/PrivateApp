@@ -19,19 +19,17 @@ struct PrivateForAppDetailPage: View {
             
             Section(header: Text("记录")) {
                 NavigationLink(destination: PrivateLocationDetailListPage(dataSource: detailData.accessors)){
-                    HStack{
-                        Image(systemName: "hand.raised.slash")
-                            .foregroundColor(.red)
-                        Text("访问记录")
-                    }
+                    DetailItem(imageName: "hand.raised.slash",
+                               foregroundColor: .red,
+                               leftText: "访问记录",
+                               rightText: "\(detailData.locationNums)")
                 }
                 
-                NavigationLink(destination: Text("没写呢")) {
-                    HStack {
-                        Image(systemName: "network")
-                            .foregroundColor(.blue)
-                        Text("网络活动")
-                    }
+                NavigationLink(destination: NetRequestDetailListPage(dataSource: detailData.networks)) {
+                    DetailItem(imageName: "network",
+                               foregroundColor: .blue,
+                               leftText: "网络活动",
+                               rightText: "\(detailData.netWorkNums)")
                 }
             }
         }
@@ -48,6 +46,25 @@ struct PrivateForAppDetailPage_Previews: PreviewProvider {
             PrivateForAppPage().previewInterfaceOrientation(.portrait)
         } else {
             // Fallback on earlier versions
+        }
+    }
+}
+
+struct DetailItem: View {
+    var imageName: String
+    var foregroundColor: Color
+    var leftText: String
+    var rightText: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: imageName)
+                .foregroundColor(foregroundColor)
+            Text(leftText)
+            Spacer()
+            Text(rightText)
+                .foregroundColor(.gray)
+                .font(.system(size: 14))
         }
     }
 }

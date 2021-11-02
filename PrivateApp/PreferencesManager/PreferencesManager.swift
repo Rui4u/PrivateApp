@@ -46,6 +46,12 @@ class PreferencesManager: ObservableObject {
     /// 原始数组
     var ogrinList = [Any]()
     
+    /// 历史本地文件
+    @Published var fileHistory :[LocationFileData] = {
+        let data = LocationPrivateFileManager.findFile()
+        return data
+    }()
+    
     @Published var appListDataSource: [PrivateDataForAppModel] = []
     @Published var sortType : SortType = .name
     @Published var sortByType : SortByType = .up
@@ -57,6 +63,7 @@ class PreferencesManager: ObservableObject {
         didSet {
             if let url = URL(string: path) {
                 LocationPrivateFileManager.saveFile(url: url)
+                fileHistory =  LocationPrivateFileManager.findFile()
             }
         }
     }
@@ -182,7 +189,11 @@ class PreferencesManager: ObservableObject {
                 let networks = dict2[key] ?? [Network]()
                 let locationNums = accessors.count
                 let netNums = networks.count
-                result.append(PrivateDataForAppModel(accessors: accessors, networks: networks, boundID: key,netWorkNums: netNums,locationNums: locationNums))
+                
+                let appInfo = PreferencesManager.shared.appInfos.filter{$0.bundleId == key}.first
+                var model = PrivateDataForAppModel(accessors: accessors, networks: networks, boundID: key,netWorkNums: netNums,locationNums: locationNums)
+                model.appInfo = appInfo
+                result.append(model)
             }
             DispatchQueue.main.async {
                 complete(result)

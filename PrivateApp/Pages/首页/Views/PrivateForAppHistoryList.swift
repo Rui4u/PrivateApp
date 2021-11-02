@@ -9,13 +9,14 @@ import SwiftUI
 
 struct PrivateForAppHistoryList: View {
     @Binding var showMeumView: Bool
+    @EnvironmentObject var manager: PreferencesManager // environment object
+
     var body: some View {
-        let searchList = LocationPrivateFileManager.findFile()
         List {
             Text("历史记录")
-            ForEach (searchList, id: \.self) { item in
+            ForEach (manager.fileHistory, id: \.self) { item in
                 HStack {
-                    Image(systemName: PreferencesManager.shared.path == item.path ? "tag.fill" :"")
+                    Image(systemName: manager.path.contains(item.path) ? "tag.fill" :"")
                         .resizable()
                         .frame(width: 12, height: 12)
                         .foregroundColor(.blue)
@@ -30,11 +31,31 @@ struct PrivateForAppHistoryList: View {
                     }
                 }
             }
+            .onDelete(perform: delete)
+            .deleteDisabled(manager.fileHistory.count == 1)
         }
         .environment(\.defaultMinListHeaderHeight, 0.1) // HERE
         .cornerRadius(4)
         .padding()
         .shadow(color: Color.gray.opacity(0.3), radius: 7, x: 0, y: 0)
+    }
+    
+    func delete(at offsets: IndexSet) {
+        if let first = offsets.first { //获得索引集合里的第一个元素，然后从数组里删除对应索引的元素
+            let path = LocationPrivateFileManager.findFile()[first].path
+            LocationPrivateFileManager.deleteLocationFile(path: path)
+            
+            if path == PreferencesManager.shared.path { //删除当前选中时
+                if first < manager.fileHistory.count {
+                    PreferencesManager.shared.path = manager.fileHistory[first].path
+                } else {
+                    let historyCount = manager.fileHistory.count
+                    if  historyCount > 0 {
+                        PreferencesManager.shared.path = manager.fileHistory[historyCount - 1].path
+                    }
+                }
+            }
+        }
     }
 }
 

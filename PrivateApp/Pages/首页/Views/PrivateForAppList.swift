@@ -72,7 +72,7 @@ struct PrivateForAppList: View {
             if manager.filterByName.count == 0 {
                 return true;
             } else {
-                return item.boundID.contains(manager.filterByName)
+                return item.boundID.contains(manager.filterByName) || item.appInfo?.appName?.contains(manager.filterByName) ?? false
             }
         }).sorted { (item1, item2) in
             

@@ -15,9 +15,6 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject { // 👈
         guard var url = URLContexts.first?.url.absoluteString else {
             return
         }
-        if url.contains("file://") {
-            url = url.replacingOccurrences(of: "file://", with: "")
-        }
         PreferencesManager.shared.path = url
     }
 }

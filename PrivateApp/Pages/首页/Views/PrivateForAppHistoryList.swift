@@ -16,7 +16,8 @@ struct PrivateForAppHistoryList: View {
             Text("历史记录")
             ForEach (manager.fileHistory, id: \.self) { item in
                 HStack {
-                    Image(systemName: manager.path == item.path ? "tag.fill" :"")
+                    let samePath = FileManager.default.contentsEqual(atPath: manager.path, andPath: item.path)
+                    Image(systemName: samePath ? "tag.fill" :"")
                         .resizable()
                         .frame(width: 12, height: 12)
                         .foregroundColor(.blue)
@@ -32,8 +33,7 @@ struct PrivateForAppHistoryList: View {
                 }
             }
             .onDelete(perform: delete)
-//            .deleteDisabled(manager.fileHistory.count == 1)
-            .deleteDisabled(false)
+            .deleteDisabled(manager.fileHistory.count == 1)
         }
         .environment(\.defaultMinListHeaderHeight, 0.1) // HERE
         .cornerRadius(4)

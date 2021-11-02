@@ -42,10 +42,10 @@ struct LocationPrivateFileManager {
     
     static func deleteLocationFile(path: String){
         let fileManager = FileManager.default
-        if fileManager.isDeletableFile(atPath: path) {
+//        if fileManager.isDeletableFile(atPath: path) {
             let _ = try? fileManager.removeItem(atPath: path)
             PreferencesManager.shared.fileHistory = LocationPrivateFileManager.findFile()
-        }
+//        }
     }
     
     

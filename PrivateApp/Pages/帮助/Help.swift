@@ -13,6 +13,11 @@ struct Help: View {
     @Binding var showHelp: Bool
     var body: some View {
         VStack {
+            Image(systemName: "questionmark.folder")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.blue)
             Text("暂未发现任何导入的文件,请导入隐私文件")
                 .padding()
             Button("如何导入") {

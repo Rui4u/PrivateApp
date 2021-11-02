@@ -20,7 +20,7 @@ struct IconImage: View {
                         .cornerRadius(8)
                 }
             } else {
-                Image(systemName: "square.dashed")
+                Image(systemName: "questionmark.app.dashed")
                     .resizable()
                     .foregroundColor(Color.blue)
             }

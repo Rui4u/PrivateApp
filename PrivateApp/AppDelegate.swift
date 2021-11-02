@@ -12,8 +12,11 @@ import Combine
 class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject { // 👈🏻
   
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let url = URLContexts.first?.url.absoluteString else {
+        guard var url = URLContexts.first?.url.absoluteString else {
             return
+        }
+        if url.contains("file://") {
+            url = url.replacingOccurrences(of: "file://", with: "")
         }
         PreferencesManager.shared.path = url
     }

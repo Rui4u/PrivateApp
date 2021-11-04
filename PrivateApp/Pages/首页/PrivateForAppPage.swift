@@ -20,8 +20,15 @@ struct PrivateForAppPage: View {
         } else {
             NavigationView() {
                 ZStack (alignment: .leading){
-                    PrivateForAppList().environmentObject(manager)
-                        .disabled(showMeumView || showHistoryView)
+                    PrivateForAppList()
+                        .environmentObject(manager)
+                        .simultaneousGesture(DragGesture().onChanged({ _ in
+                            hideKeyboard()
+                            withAnimation {
+                                showHistoryView = false
+                                showMeumView = false
+                            }
+                        }))
                     GeometryReader { reader in
                         let width = reader.size.width
                         let height = reader.size.height
@@ -35,31 +42,30 @@ struct PrivateForAppPage: View {
                             .frame(width: 300, height: height)
                             .position(x: showHistoryView ?  150 : -150, y: height / 2)
                             .opacity(showHistoryView ? 1 : 0)
-                        
-                        
                     }
                 }
                 .navigationBarTitle("应用程序", displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
+                        Button("") {
                             withAnimation {
                                 showMeumView.toggle()
                             }
-                        } label: {
-                            Image(systemName: "gear").foregroundColor(.black)
                         }
+                        .buttonStyle(CustomButtonStyle(selected: $showMeumView,
+                                                        imageName: "gear"))
                         .disabled(showHistoryView)
+
                     }
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
+                        Button("") {
                             withAnimation {
                                 showHistoryView.toggle()
                             }
-                        } label: {
-                            Image(systemName: "folder").foregroundColor(.black)
                         }
+                        .buttonStyle(CustomButtonStyle(selected: $showHistoryView,
+                                                        imageName: "folder"))
                         .disabled(showMeumView)
                     }
                 }
@@ -68,6 +74,14 @@ struct PrivateForAppPage: View {
     }
 }
 
+struct CustomButtonStyle: ButtonStyle {
+    @Binding var selected : Bool
+    var imageName: String
+    func makeBody(configuration: Configuration) -> some View {
+        return Image(systemName: imageName)
+            .foregroundColor(selected ? .gray : .black)
+    }
+}
 
 struct PrivateForAppPage_Previews: PreviewProvider {
     static var previews: some View {

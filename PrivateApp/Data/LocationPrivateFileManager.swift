@@ -49,14 +49,21 @@ struct LocationPrivateFileManager {
     }
     
     
+    
+    static let customPath = "ndjson"
+    
     static func findFile() -> [LocationFileData]{
         var resultList = [LocationFileData]()
         
-        guard var path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last else {
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last else {
             return resultList
         }
-        path = path + "/Inbox"
-        guard let bundlePath = Bundle(path: path)?.resourcePath else {
+        
+        guard let pathUrl = URL(string:path)?.appendingPathComponent(customPath).absoluteString else {
+            return resultList
+        }
+        
+        guard let bundlePath = Bundle(path: pathUrl)?.resourcePath else {
             return resultList
         }
         let array = Bundle.paths(forResourcesOfType: "ndjson", inDirectory: bundlePath).sorted {$0.localizedStandardCompare($1) == .orderedAscending}
@@ -70,23 +77,32 @@ struct LocationPrivateFileManager {
         return resultList
     }
     
-    static func saveFile(url: URL) {
-//        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last else {
-//            return
-//        }
-//        
-//        let fileManager = FileManager.default
-//        let fileName = "\(url.lastPathComponent)"
-//        
-//        let filePath = path + "/" + fileName
-//        if (!fileManager.fileExists(atPath: filePath)) { //创建
-//            try? fileManager.createDirectory(at: URL(string: filePath)!, withIntermediateDirectories: true, attributes: nil)
-//        }
-//        
-//        guard let data = NSData(contentsOf: url) else {
-//            return
-//        }
-//        let _ = data.write(toFile: filePath, atomically: true)
+    static func saveFile(url: URL) -> String {
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last else {
+            return ""
+        }
+        let fileManager = FileManager.default
+        
+        let fileName = "\(url.lastPathComponent)"
+        let fileDictUrl = URL(fileURLWithPath:path).appendingPathComponent(customPath)
+        
+        do {
+            try fileManager.createDirectory(at: fileDictUrl, withIntermediateDirectories: true, attributes: nil)
+        } catch let error {
+            print(error)
+        }
+        
+        let filePath = URL(string: path)!.appendingPathComponent(customPath).appendingPathComponent(fileName).absoluteString
+        
+        if (fileManager.fileExists(atPath: filePath)) { // 如果文件存在 删除就文件
+           try? fileManager.removeItem(atPath: filePath)
+        }
+        
+        guard let data = NSData(contentsOf: url) else {
+            return ""
+        }
+        let _ = data.write(toFile: filePath, atomically: true)
+        return filePath
     }
     
        

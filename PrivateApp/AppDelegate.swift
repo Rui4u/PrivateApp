@@ -12,10 +12,10 @@ import Combine
 class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject { // 👈🏻
   
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard var url = URLContexts.first?.url.absoluteString else {
+        guard let url = URLContexts.first?.url else {
             return
         }
-        PreferencesManager.shared.path = url
+        PreferencesManager.shared.path = LocationPrivateFileManager.saveFile(url: url)
     }
 }
 

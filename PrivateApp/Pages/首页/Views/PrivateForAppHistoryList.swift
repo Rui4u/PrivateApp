@@ -16,7 +16,7 @@ struct PrivateForAppHistoryList: View {
             Text("历史记录")
             ForEach (manager.fileHistory, id: \.self) { item in
                 HStack {
-                    let samePath = FileManager.default.contentsEqual(atPath: manager.path, andPath: item.path)
+                    let samePath = manager.path == item.path
                     Image(systemName: samePath ? "tag.fill" :"")
                         .resizable()
                         .frame(width: 12, height: 12)

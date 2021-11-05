@@ -61,10 +61,7 @@ class PreferencesManager: ObservableObject {
     
     @Published var path: String = "" {
         didSet {
-            if let url = URL(string: path) {
-                LocationPrivateFileManager.saveFile(url: url)
-                fileHistory =  LocationPrivateFileManager.findFile()
-            }
+            fileHistory =  LocationPrivateFileManager.findFile()
         }
     }
     

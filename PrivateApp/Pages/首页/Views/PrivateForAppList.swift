@@ -15,14 +15,14 @@ struct PrivateForAppList: View {
     var body: some View {
         ZStack {
             VStack {
-                SearchBar(title: $searchTitle)
-                    .onReceive(searchTitle.publisher.reduce("", { t, c in
-                        return t + String(c)
-                    })) { text in
-                        if manager.filterByName != text {
-                            manager.filterByName = text
-                        }
-                    }
+//                SearchBar(title: $searchTitle)
+//                    .onReceive(searchTitle.publisher.reduce("", { t, c in
+//                        return t + String(c)
+//                    })) { text in
+//                        if manager.filterByName != text {
+//                            manager.filterByName = text
+//                        }
+//                    }
                 List() {
                     ForEach(filterList(),id:\.self) { item in
                         NavigationLink(destination:
@@ -33,6 +33,8 @@ struct PrivateForAppList: View {
                         }
                     }
                 }
+                .searchable(text: $manager.filterByName, prompt: "搜索")
+                
                 .refreshable {
                     hideKeyboard()
                 }
@@ -72,7 +74,7 @@ struct PrivateForAppList: View {
             if manager.filterByName.count == 0 {
                 return true;
             } else {
-                return item.boundID.contains(manager.filterByName) || item.appInfo?.appName?.contains(manager.filterByName) ?? false
+                return item.boundID.contains(manager.filterByName) || item.appInfo?.appName?.lowercased().contains(manager.filterByName.lowercased()) ?? false
             }
         }).sorted { (item1, item2) in
             

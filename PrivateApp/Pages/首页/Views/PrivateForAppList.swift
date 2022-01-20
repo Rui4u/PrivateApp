@@ -10,31 +10,20 @@ import Combine
 struct PrivateForAppList: View {
     @EnvironmentObject var manager: PreferencesManager
     @State var searchTitle =  ""
-
+    @Binding var disabledClick: Bool;
     @State var isLoading = false
     var body: some View {
         ZStack {
             VStack {
-//                SearchBar(title: $searchTitle)
-//                    .onReceive(searchTitle.publisher.reduce("", { t, c in
-//                        return t + String(c)
-//                    })) { text in
-//                        if manager.filterByName != text {
-//                            manager.filterByName = text
-//                        }
-//                    }
                 List() {
                     ForEach(filterList(),id:\.self) { item in
-                        NavigationLink(destination:
-                                        PrivateForAppDetailPage(detailData: item,
-                                                                warringTimes:manager.warringTimes)
-                        ) {
+                        let jumpPage = PrivateForAppDetailPage(detailData: item, warringTimes:manager.warringTimes)
+                        NavigationLink(destination: jumpPage) {
                             PrivateForAppPageListItem(item: item)
-                        }
+                        }.disabled(disabledClick)
                     }
                 }
                 .searchable(text: $manager.filterByName, prompt: "搜索")
-                
                 .refreshable {
                     hideKeyboard()
                 }
@@ -43,21 +32,25 @@ struct PrivateForAppList: View {
             if isLoading {
                 LoadingView()
             }
-        }.onAppear {
-            if self.manager.allBinddingPath == true {
-                return;
-            }
-            self.manager.allBinddingPath = true;
-            let sink = Subscribers.Sink<String, Never>(receiveCompletion: { item in
-            }, receiveValue: {item in
-                reloadList(path: item)
-            })
-            PreferencesManager.shared.$path.subscribe(sink)
         }
+        .onReceive(PreferencesManager.shared.$path, perform: { item in
+            reloadList(path: item)
+        })
+//        .onAppear {
+//            if self.manager.allBinddingPath == true {
+//                return;
+//            }
+//            self.manager.allBinddingPath = true;
+//            let sink = Subscribers.Sink<String, Never>(receiveCompletion: { item in
+//            }, receiveValue: {item in
+//                reloadList(path: item)
+//            })
+//            PreferencesManager.shared.$path.subscribe(sink)
+//        }
     }
     
     func reloadList(path : String) {
-       
+        
         self.isLoading = true;
         PreferencesManager.shared.allDataSourceForApp(path:path ) { result in
             self.isLoading =  false;
@@ -70,11 +63,17 @@ struct PrivateForAppList: View {
     
     /// 筛选list
     func filterList() ->[PrivateDataForAppModel] {
-        manager.appListDataSource.filter({ item in
+        let filterName = manager.filterByName.lowercased()
+        
+        return manager.appListDataSource.filter({ item in
             if manager.filterByName.count == 0 {
                 return true;
             } else {
-                return item.boundID.contains(manager.filterByName) || item.appInfo?.appName?.lowercased().contains(manager.filterByName.lowercased()) ?? false
+                let appName = item.appInfo?.appName?.lowercased()
+                let bundleId = item.boundID.lowercased()
+                
+                let nameContains = appName?.contains(filterName) ?? false
+                return bundleId.contains(filterName) || nameContains
             }
         }).sorted { (item1, item2) in
             

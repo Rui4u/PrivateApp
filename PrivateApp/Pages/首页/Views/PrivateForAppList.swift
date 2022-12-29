@@ -10,7 +10,7 @@ import Combine
 struct PrivateForAppList: View {
     @EnvironmentObject var manager: PreferencesManager
     @State var searchTitle =  ""
-    @Binding var disabledClick: Bool;
+//    @Binding var disabledClick: Bool;
     @State var isLoading = false
     var body: some View {
         ZStack {
@@ -20,7 +20,8 @@ struct PrivateForAppList: View {
                         let jumpPage = PrivateForAppDetailPage(detailData: item, warringTimes:manager.warringTimes)
                         NavigationLink(destination: jumpPage) {
                             PrivateForAppPageListItem(item: item)
-                        }.disabled(disabledClick)
+                        }
+//                        .disabled(disabledClick)
                     }
                 }
                 .searchable(text: $manager.filterByName, prompt: "搜索")

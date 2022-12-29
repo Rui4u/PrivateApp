@@ -81,7 +81,7 @@ struct CartesianChartView: UIViewRepresentable {
         lineChartView.doubleTapToZoomEnabled = false;
         lineChartView.scaleXEnabled = false;
         lineChartView.scaleYEnabled = false;
-        lineChartView.chartDescription?.text = "";//设置为""隐藏描述文字
+        lineChartView.chartDescription.text = "";//设置为""隐藏描述文字
         
         lineChartView.noDataText = "暂无数据";
         lineChartView.noDataTextColor = UIColor.gray;
@@ -166,7 +166,7 @@ struct CartesianChartView: UIViewRepresentable {
                 }
             }
             
-            let set1 = LineChartDataSet.init(entries: yDataArray1, label: iconInfo.name);
+            let set1 = LineChartDataSet.init(entries: yDataArray1, label: iconInfo.name ?? "");
             set1.colors = [UIColor(iconInfo.lineColor)]
             set1.drawCirclesEnabled = false;//绘制转折点
             set1.mode = .horizontalBezier
